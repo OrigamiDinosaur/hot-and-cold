@@ -67,6 +67,7 @@ stylecop.*
 *.dbmdl
 Generated_Code #added for RIA/Silverlight projects
 .utmp/
+ServerData/
 
 
 #################

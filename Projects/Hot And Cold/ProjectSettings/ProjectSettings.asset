@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Origami Dinosaur
-  productName: Hot & Cold
+  productName: Hot And Cold
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -164,7 +164,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.UnityTechnologies.com.unity.template.urpblank
+    Android: com.OrigamiDinosaur.HotAndCold
     Standalone: com.Unity-Technologies.com.unity.template.urp-blank
     iPhone: com.Unity-Technologies.com.unity.template.urp-blank
   buildNumber:
@@ -826,11 +826,25 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: ENABLE_JSON_CATALOG
+    EmbeddedLinux: ENABLE_JSON_CATALOG
+    LinuxHeadlessSimulation: ENABLE_JSON_CATALOG
+    Nintendo Switch: ENABLE_JSON_CATALOG
+    PS4: ENABLE_JSON_CATALOG
+    QNX: ENABLE_JSON_CATALOG
+    Server: ENABLE_JSON_CATALOG
+    Standalone: ENABLE_JSON_CATALOG
+    WebGL: ENABLE_JSON_CATALOG
+    Windows Store Apps: ENABLE_JSON_CATALOG
+    XboxOne: ENABLE_JSON_CATALOG
+    iPhone: ENABLE_JSON_CATALOG
+    tvOS: ENABLE_JSON_CATALOG
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
+    Standalone: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   il2cppStacktraceInformation: {}
@@ -935,7 +949,7 @@ PlayerSettings:
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 0
+  insecureHttpOption: 1
   androidVulkanDenyFilterList: []
   androidVulkanAllowFilterList: []
   androidVulkanDeviceFilterListAsset: {fileID: 0}
