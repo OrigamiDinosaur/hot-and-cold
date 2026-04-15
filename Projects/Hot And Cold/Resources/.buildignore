@@ -1,0 +1,11 @@
+//-----------------------------------------------------------------------------------------
+// Build Ignore
+//-----------------------------------------------------------------------------------------
+
+// This file defines the file paths (or partial paths wildcarded with a *) to resources which should not be overwritten
+// by our build post process.
+// By default, any match will result in a full ignore. However, if an entry in this file begins with a tilde (~), this
+// denotes a partial ignore, which only ignores the file if (a version of) it has already been copied over. If the file
+// doesn't already exist, it will be copied.
+
+*.gitignore

@@ -1,0 +1,10 @@
+{
+    "name": "FullSerializer.Editor",
+    "references": [
+        "FullSerializer"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

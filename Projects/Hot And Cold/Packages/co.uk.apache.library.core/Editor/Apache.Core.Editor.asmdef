@@ -1,0 +1,18 @@
+{
+    "name": "Apache.Core.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7b0357e1a97147e4390b6d8f5e0eaa77"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
