@@ -66,7 +66,7 @@ namespace Apache.Core {
 			lock (syncRoot) {
 
 				// find all objects of this type.
-				T[] existingObjects = FindObjectsByType<T>();
+				T[] existingObjects = FindObjectsOfType<T>();
 				if (existingObjects.Length > 0) {
 
 					// if there are more than 0, clear all instances until there is only one.

@@ -121,7 +121,7 @@ namespace Apache.Core.Editor {
 				// select the hierarchy window and invoke the expand method on it.
 				EditorApplication.ExecuteMenuItem("Window/General/Hierarchy");
 				EditorWindow window = EditorWindow.focusedWindow;
-				methodInfo.Invoke(window, new object[] { gameObject.GetEntityId(), true });
+				methodInfo.Invoke(window, new object[] { gameObject.GetInstanceID(), true });
 			}
 
 			// parent the new game object to the parent context and set its sibling index.
@@ -268,7 +268,7 @@ namespace Apache.Core.Editor {
 			EditorApplication.ExecuteMenuItem("Window/Sequencing/Timeline");
 
 			// look in the scene for enabled timelines, backing out if there are none or more than one.
-			PlayableDirector[] directors = Object.FindObjectsByType<PlayableDirector>();
+			PlayableDirector[] directors = Object.FindObjectsOfType<PlayableDirector>();
 			if (directors == null || directors.Length != 1) return;
 
 			// select the game object of the first and only director.
@@ -351,7 +351,7 @@ namespace Apache.Core.Editor {
 
 			// find scene controller and load subscenes from its required subscenes.
 			// N.B. we don't beep because we may be loading a subscene which doesn't have a scene controller.
-			SceneControllerBase sceneController = Object.FindAnyObjectByType<SceneControllerBase>();
+			SceneControllerBase sceneController = Object.FindObjectOfType<SceneControllerBase>();
 			if (sceneController == null) return;
 
 			// create a new undo group.
@@ -377,7 +377,7 @@ namespace Apache.Core.Editor {
 
 			// grab the scene init component so we know which scene to load.
 			// N.B. there will (or really rather should be!) only one scene setter.
-			SceneInit sceneInit = Object.FindAnyObjectByType<SceneInit>();
+			SceneInit sceneInit = Object.FindObjectOfType<SceneInit>();
 			Scenes scene = sceneInit.Scene;
 
 			// open the scene, thereby unloading all others, but ask the user if they want to save first.

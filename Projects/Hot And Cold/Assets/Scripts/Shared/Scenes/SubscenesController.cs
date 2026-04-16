@@ -126,7 +126,7 @@ namespace Apache.Core {
 	#endif
 
 				// grab low render priority objects from super scene.
-				SuperSceneLowRenderPriorityObject[] lowRenderPriorityObjects = Object.FindObjectsByType<SuperSceneLowRenderPriorityObject>();
+				SuperSceneLowRenderPriorityObject[] lowRenderPriorityObjects = Object.FindObjectsOfType<SuperSceneLowRenderPriorityObject>();
 				foreach (SuperSceneLowRenderPriorityObject lowRenderPriorityObject in lowRenderPriorityObjects) {
 
 					// in the editor, make an undo item for when we disable the object.
@@ -337,7 +337,7 @@ namespace Apache.Core {
 			}
 
 			// find all subscene controllers and initialise them as such.
-			SubsceneControllerBase[] subsceneControllers = Object.FindObjectsByType<SubsceneControllerBase>();
+			SubsceneControllerBase[] subsceneControllers = Object.FindObjectsOfType<SubsceneControllerBase>();
 			foreach (SubsceneControllerBase subsceneController in subsceneControllers) {
 				subsceneController.InitAsSubscene();
 			}

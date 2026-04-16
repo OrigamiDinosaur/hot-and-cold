@@ -24,7 +24,7 @@ namespace Apache.Core {
 		public void LogUnbatchedMeshes() {
 
 			// get all components with a mesh filter.
-			MeshFilter[] meshFilters = FindObjectsByType<MeshFilter>();
+			MeshFilter[] meshFilters = FindObjectsOfType<MeshFilter>();
 
 			// create a list for offending game objects.
 			List<UnbatchedMesh> unbatchedMeshes = new List<UnbatchedMesh>();
