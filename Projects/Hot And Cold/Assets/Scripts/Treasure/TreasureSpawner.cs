@@ -18,6 +18,12 @@ public class TreasureSpawner : ApacheComponent {
 	[SerializeField] protected float[] weightPerRarity;
 
 	//-----------------------------------------------------------------------------------------
+	// Public Properties:
+	//-----------------------------------------------------------------------------------------
+
+	public Treasure Treasure => treasureHolder;
+
+	//-----------------------------------------------------------------------------------------
 	// Private Fields:
 	//-----------------------------------------------------------------------------------------
 
@@ -44,12 +50,12 @@ public class TreasureSpawner : ApacheComponent {
 
 		maxThreshold = currentMaxThreshold; 
 	}
-
+	
 	//-----------------------------------------------------------------------------------------
-	// Private Methods:
+	// Public Methods:
 	//-----------------------------------------------------------------------------------------
 
-	private void SpawnTreasure() {
+	public void SpawnTreasure() {
 
 		// generate a random location within our bounds.
 		Vector3 spawnLocation = spawnBounds.transform.position + spawnBounds.center;

@@ -1,5 +1,14 @@
+using System.Numerics;
 using Apache.Core;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
+
+[System.Serializable]
+public class RangeValue {
+
+	public float range;
+	public string description; 
+}
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : ApacheComponent {
@@ -24,6 +33,17 @@ public class PlayerController : ApacheComponent {
 
 	[SerializeField] protected float movementSpeed;
 
+	[Header("Search")]
+
+	[SerializeField] protected string defaultSearchDescription;
+	[SerializeField] protected RangeValue[] searchRanges;
+
+	//-----------------------------------------------------------------------------------------
+	// Private Fields:
+	//-----------------------------------------------------------------------------------------
+
+	private Treasure currentTreasure;
+
 	//-----------------------------------------------------------------------------------------
 	// Unity Lifecycle:
 	//-----------------------------------------------------------------------------------------
@@ -31,34 +51,57 @@ public class PlayerController : ApacheComponent {
 	protected void Update() {
 
 		cc.Move(Vector3.down * 9.98f * Time.deltaTime);
-
-		float horizontal = Mathf.RoundToInt(Input.GetAxisRaw("Horizontal"));
-		float vertical = Mathf.RoundToInt(Input.GetAxisRaw("Vertical"));
-
-		if (horizontal == 0 && vertical == 0) {
-
-			animator.SetFloat(SPEED_PARAMETER, 0.0f);
-			return; 
-		}
-		
-		Vector3 movementDirection = (transform.forward * vertical) + (transform.right * horizontal);
-		movementDirection.Normalize();
-		
-		animator.SetFloat(SPEED_PARAMETER, 1.0f); 
-
-		UpdateMovement(movementDirection);
 	}
 
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
 	//-----------------------------------------------------------------------------------------
 
+	public void SetTreasure(Treasure inTreasure) {
+		currentTreasure = inTreasure;
+	}
+
 	public void UpdateMovement(Vector3 movementDirection) {
 
+		if (movementDirection == Vector3.zero) {
+			animator.SetFloat(SPEED_PARAMETER, 0.0f);
+			return; 
+		}
+
 		robotRoot.transform.forward = movementDirection;
+		animator.SetFloat(SPEED_PARAMETER, 1.0f);
 
 		Vector3 movement = (movementDirection * movementSpeed) * Time.deltaTime;
 
 		cc.Move(movement);
+	}
+
+	public void Search() {
+
+		Vector3 treasurePosition = currentTreasure.transform.position;
+		treasurePosition.y = transform.position.y;
+
+		float distanceFromTreasure = Vector3.Distance(transform.position, treasurePosition);
+
+		Debug.Log(distanceFromTreasure); 
+
+		string searchDescription = defaultSearchDescription;
+
+		bool didFindTreasure = false; 
+
+		for (int i = 0; i < searchRanges.Length; i++) {
+
+			if (distanceFromTreasure < searchRanges[i].range) {
+
+				searchDescription = searchRanges[i].description;
+
+				if (i == 0) didFindTreasure = true;
+				break;
+			}
+		}
+
+		Debug.Log(searchDescription);
+
+		Debug.Log(didFindTreasure); 
 	}
 }
