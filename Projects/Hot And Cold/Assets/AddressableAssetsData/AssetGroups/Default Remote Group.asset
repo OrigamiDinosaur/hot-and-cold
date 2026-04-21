@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Default Remote Group
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Remote Group
+  m_Data:
+    m_SerializedData: []
   m_GUID: 9511a02ae81a02c4eaf3b52cd97a19df
   m_SerializeEntries: []
   m_ReadOnly: 0

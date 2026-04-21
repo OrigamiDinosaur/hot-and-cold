@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Remote Packed Assets
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Remote Packed Assets
+  m_Data:
+    m_SerializedData: []
   m_GUID: a7dbfd31e9dfd5a439f781e48eaea26b
   m_SerializeEntries:
   - m_GUID: 109b0b1f9e1b1e5418acd571df62968b
