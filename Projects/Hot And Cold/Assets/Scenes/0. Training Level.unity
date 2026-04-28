@@ -5240,6 +5240,8 @@ MonoBehaviour:
     description: Warmer
   - range: 5
     description: Warm
+  pingSfx: {fileID: 8300000, guid: 72d1b2806fdcb7449a7b94d617839cc6, type: 3}
+  treasureFoundSfx: {fileID: 8300000, guid: 50da6a367f3e4a04e88aa018a57862e3, type: 3}
 --- !u!143 &2109504248
 CharacterController:
   m_ObjectHideFlags: 0

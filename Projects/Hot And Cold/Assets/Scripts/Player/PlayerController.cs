@@ -38,6 +38,11 @@ public class PlayerController : ApacheComponent {
 	[SerializeField] protected string defaultSearchDescription;
 	[SerializeField] protected RangeValue[] searchRanges;
 
+	[Header("Audio")]
+
+	[SerializeField] protected AudioClip pingSfx;
+	[SerializeField] protected AudioClip treasureFoundSfx;
+
 	//-----------------------------------------------------------------------------------------
 	// Private Fields:
 	//-----------------------------------------------------------------------------------------
@@ -101,9 +106,13 @@ public class PlayerController : ApacheComponent {
 		if (didFindTreasure) {
 			GameGuiController.TreasureFoundView.ShowTreasureFoundDialogue(currentTreasure.TreasureAsset);
 
+			AudioSource.PlayClipAtPoint(treasureFoundSfx, transform.position);
+
 			currentTreasure.Collected();
 		}
 		else {
+
+			AudioSource.PlayClipAtPoint(pingSfx, transform.position);
 
 			GameGuiController.TreasureWarmthView.ShowTreasureWarmthDialogue(searchDescription);
 		}
