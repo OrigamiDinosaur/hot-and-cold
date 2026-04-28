@@ -41,7 +41,7 @@ public class TreasureFoundView : ApacheComponent {
 	// Public Methods:
 	//-----------------------------------------------------------------------------------------
 
-	void ShowTreasureFoundDialogue(TreasureAsset treasureAsset) {
+	public void ShowTreasureFoundDialogue(TreasureAsset treasureAsset) {
 
 		treasureNameText.text = treasureAsset.ItemName;
 		treasureValueText.text = string.Format(VALUE_TEXT, treasureAsset.ItemValue.value);

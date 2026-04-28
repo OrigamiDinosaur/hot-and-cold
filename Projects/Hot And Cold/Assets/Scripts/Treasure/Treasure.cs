@@ -1,7 +1,14 @@
+using System;
 using Apache.Core;
 using UnityEngine;
 
 public class Treasure : ApacheComponent {
+
+	//-----------------------------------------------------------------------------------------
+	// Events:
+	//-----------------------------------------------------------------------------------------
+
+	public event Action TreasureCollected;
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -29,5 +36,9 @@ public class Treasure : ApacheComponent {
 		treasureAsset = inAsset;
 
 		treasureName = treasureAsset.ItemName;
+	}
+
+	public void Collected() {
+		TreasureCollected?.Invoke();
 	}
 }

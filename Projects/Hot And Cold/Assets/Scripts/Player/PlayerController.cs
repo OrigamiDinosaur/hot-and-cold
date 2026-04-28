@@ -82,9 +82,7 @@ public class PlayerController : ApacheComponent {
 		treasurePosition.y = transform.position.y;
 
 		float distanceFromTreasure = Vector3.Distance(transform.position, treasurePosition);
-
-		Debug.Log(distanceFromTreasure); 
-
+		
 		string searchDescription = defaultSearchDescription;
 
 		bool didFindTreasure = false; 
@@ -99,9 +97,15 @@ public class PlayerController : ApacheComponent {
 				break;
 			}
 		}
+		
+		if (didFindTreasure) {
+			GameGuiController.TreasureFoundView.ShowTreasureFoundDialogue(currentTreasure.TreasureAsset);
 
-		Debug.Log(searchDescription);
+			currentTreasure.Collected();
+		}
+		else {
 
-		Debug.Log(didFindTreasure); 
+			GameGuiController.TreasureWarmthView.ShowTreasureWarmthDialogue(searchDescription);
+		}
 	}
 }

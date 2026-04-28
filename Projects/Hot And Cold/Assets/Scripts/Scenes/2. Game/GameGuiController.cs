@@ -1,24 +1,19 @@
 using Apache.Core;
 using UnityEngine;
 
-public class GameSceneController : ApacheComponent {
+public class GameGuiController : ComponentSingletonProtected<GameGuiController> {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
 	//-----------------------------------------------------------------------------------------
-
-	[SerializeField] protected TreasureSpawner treasureSpawner;
-	[SerializeField] protected PlayerController playerController;
+	
+	[SerializeField] protected TreasureWarmthView treasureWarmthView;
+	[SerializeField] protected TreasureFoundView treasureFoundView;
 
 	//-----------------------------------------------------------------------------------------
-	// Unity Lifecycle:
+	// Public Properties:
 	//-----------------------------------------------------------------------------------------
 
-	protected void Start() {
-
-		sequence.NextFrame(() => {
-			treasureSpawner.SpawnTreasure();
-			playerController.SetTreasure(treasureSpawner.Treasure);
-		});
-	}
+	public static TreasureWarmthView TreasureWarmthView => Instance.treasureWarmthView;
+	public static TreasureFoundView TreasureFoundView => Instance.treasureFoundView;
 }

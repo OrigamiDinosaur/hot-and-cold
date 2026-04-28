@@ -34,6 +34,10 @@ public class TreasureSpawner : ApacheComponent {
 	// Unity Lifecycle:
 	//-----------------------------------------------------------------------------------------
 
+	protected void OnEnable() {
+		treasureHolder.TreasureCollected += TreasureHolder_TreasureCollected;
+	}
+
 	protected void Start() {
 		
 		spawnThresholds = new float[treasureSpawns.Length];
@@ -50,7 +54,19 @@ public class TreasureSpawner : ApacheComponent {
 
 		maxThreshold = currentMaxThreshold; 
 	}
+
+	protected void OnDisable() {
+		treasureHolder.TreasureCollected -= TreasureHolder_TreasureCollected; 
+	}
 	
+	//-----------------------------------------------------------------------------------------
+	// Event Handlers:
+	//-----------------------------------------------------------------------------------------
+
+	private void TreasureHolder_TreasureCollected() {
+		SpawnTreasure();
+	}
+
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
 	//-----------------------------------------------------------------------------------------
