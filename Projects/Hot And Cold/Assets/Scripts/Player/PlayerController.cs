@@ -1,4 +1,3 @@
-using System.Numerics;
 using Apache.Core;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
@@ -18,6 +17,17 @@ public class PlayerController : ApacheComponent {
 	//-----------------------------------------------------------------------------------------
 
 	private static readonly int SPEED_PARAMETER = Animator.StringToHash("Speed");
+
+	//-----------------------------------------------------------------------------------------
+	// Type Definitions:
+	//-----------------------------------------------------------------------------------------
+
+	private enum States {
+		PreInit,
+		Waiting,
+		Gameplay,
+		Ending
+	}
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -47,15 +57,22 @@ public class PlayerController : ApacheComponent {
 	// Private Fields:
 	//-----------------------------------------------------------------------------------------
 
+	private States state = States.PreInit; 
+
 	private Treasure currentTreasure;
 
 	//-----------------------------------------------------------------------------------------
 	// Unity Lifecycle:
 	//-----------------------------------------------------------------------------------------
 
+	protected void Start() {
+
+		ChangeStates(States.Waiting);
+	}
+
 	protected void Update() {
 
-		cc.Move(Vector3.down * 9.98f * Time.deltaTime);
+		UpdateStates();
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -66,7 +83,16 @@ public class PlayerController : ApacheComponent {
 		currentTreasure = inTreasure;
 	}
 
+	public void StartGame() {
+		ChangeStates(States.Gameplay);
+	}
+
+	public void StopGame() {
+		ChangeStates(States.Ending);
+	}
+
 	public void UpdateMovement(Vector3 movementDirection) {
+		if (state != States.Gameplay) return; 
 
 		if (movementDirection == Vector3.zero) {
 			animator.SetFloat(SPEED_PARAMETER, 0.0f);
@@ -82,6 +108,7 @@ public class PlayerController : ApacheComponent {
 	}
 
 	public void Search() {
+		if (state != States.Gameplay) return; 
 
 		Vector3 treasurePosition = currentTreasure.transform.position;
 		treasurePosition.y = transform.position.y;
@@ -116,5 +143,41 @@ public class PlayerController : ApacheComponent {
 
 			GameGuiController.TreasureWarmthView.ShowTreasureWarmthDialogue(searchDescription);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// State Methods:
+	//-----------------------------------------------------------------------------------------
+
+	private void ChangeStates(States newState) {
+		if (newState == state) return;
+
+		state = newState;
+
+		switch (state) {
+			case States.Gameplay:
+				break;
+			case States.Ending:
+				StateEnding_Enter();
+				break;
+		}
+	}
+
+	private void UpdateStates() {
+
+		switch (state) {
+			case States.Gameplay:
+				StateGameplay_Update();
+				break;
+		}
+	}
+
+	private void StateGameplay_Update() {
+
+		cc.Move(Vector3.down * 9.98f * Time.deltaTime);
+	}
+
+	private void StateEnding_Enter() {
+		animator.SetFloat(SPEED_PARAMETER, 0.0f);
 	}
 }

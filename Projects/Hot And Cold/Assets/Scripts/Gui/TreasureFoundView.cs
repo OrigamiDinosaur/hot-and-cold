@@ -1,7 +1,6 @@
 using Apache.Core;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 public class TreasureFoundView : ApacheComponent {
