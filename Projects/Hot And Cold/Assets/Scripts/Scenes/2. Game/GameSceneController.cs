@@ -17,6 +17,11 @@ public class GameSceneController : ApacheComponent {
 		TransitionToGame,
 		Game,
 		GameEnd,
+		TransitionToOutroScreen,
+		OutroScreen,
+		TransitionToReset,
+		Reset,
+		TransitionToMenu,
 		Exit
 	}
 
@@ -32,13 +37,21 @@ public class GameSceneController : ApacheComponent {
 	[SerializeField] protected CinemachineCamera introCamera;
 	[SerializeField] protected CinemachineCamera gameplayCamera;
 
-	[Header("Transition")]
+	[Header("Transition To Game")]
 
 	[SerializeField] protected float transitionToGameDuration;
 
 	[Header("Game")]
 
 	[SerializeField] protected float gameDuration;
+
+	[Header("Game End")]
+
+	[SerializeField] protected float gameEndDuration;
+
+	[Header("Reset")]
+
+	[SerializeField] protected float resetDuration;
 
 	//-----------------------------------------------------------------------------------------
 	// Private Fields:
@@ -47,6 +60,7 @@ public class GameSceneController : ApacheComponent {
 	private States state = States.PreInit;
 
 	private GameMenuView gameMenuView;
+	private OutroScreenView outroScreenView; 
 
 	private float gameStartTime;
 	private float gameEndTime;
@@ -62,7 +76,12 @@ public class GameSceneController : ApacheComponent {
 		gameMenuView.PlayButtonClicked += MenuView_PlayButtonClicked;
 		gameMenuView.ShopButtonClicked += MenuView_ShopButtonClicked;
 		gameMenuView.ExitButtonClicked += MenuView_ExitButtonClicked;
-		gameMenuView.MenuClosed += MenuView_MenuClosed;
+		gameMenuView.TransitionCompleted += MenuView_TransitionCompleted;
+
+		outroScreenView = GameGuiController.OutroScreenView;
+
+		outroScreenView.TransitionCompleted += OutroScreenView_TransitionCompleted;
+		outroScreenView.ValuesPresented += OutroScreenView_ValuesPresented; 
 	}
 
 	protected void Start() {
@@ -80,7 +99,10 @@ public class GameSceneController : ApacheComponent {
 		gameMenuView.PlayButtonClicked -= MenuView_PlayButtonClicked;
 		gameMenuView.ShopButtonClicked -= MenuView_ShopButtonClicked;
 		gameMenuView.ExitButtonClicked -= MenuView_ExitButtonClicked;
-		gameMenuView.MenuClosed -= MenuView_MenuClosed;
+		gameMenuView.TransitionCompleted -= MenuView_TransitionCompleted;
+
+		outroScreenView.TransitionCompleted -= OutroScreenView_TransitionCompleted;
+		outroScreenView.ValuesPresented -= OutroScreenView_ValuesPresented;
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -103,8 +125,9 @@ public class GameSceneController : ApacheComponent {
 		ChangeStates(States.Exit);
 	}
 
-	private void MenuView_MenuClosed() {
+	private void MenuView_TransitionCompleted() {
 
+		// todo: convert to switch if a third state arrises. 
 		if (state == States.MenuClose) {
 
 			ChangeStates(States.TransitionToGame);
@@ -113,6 +136,36 @@ public class GameSceneController : ApacheComponent {
 
 			SceneManager.LoadScene(0);
 		}
+
+		switch (state) {
+			case States.MenuClose:
+				ChangeStates(States.TransitionToGame);
+				break;
+			case States.Exit:
+				SceneManager.LoadScene(0);
+				break;
+			case States.TransitionToMenu:
+				ChangeStates(States.Menu); 
+				break;
+		}
+	}
+
+	private void OutroScreenView_TransitionCompleted() {
+		
+		if (state == States.TransitionToOutroScreen) {
+
+			ChangeStates(States.OutroScreen);
+		}
+		else if (state == States.TransitionToReset) {
+
+			ChangeStates(States.Reset); 
+		}
+	}
+
+	private void OutroScreenView_ValuesPresented() {
+		if (state != States.OutroScreen) return;
+
+		ChangeStates(States.TransitionToReset);
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -139,6 +192,21 @@ public class GameSceneController : ApacheComponent {
 			case States.GameEnd:
 				StateGameEnd_Enter();
 				break; 
+			case States.TransitionToOutroScreen:
+				StateTransitionToOutroScreen_Enter();
+				break;
+			case States.OutroScreen:
+				StateOutroScreen_Enter();
+				break;
+			case States.TransitionToReset:
+				StateTransitionToReset_Enter();
+				break;
+			case States.Reset:
+				StateReset_Enter();
+				break;
+			case States.TransitionToMenu:
+				StateTransitionToMenu_Enter();
+				break;
 			case States.Exit:
 				StateExit_Enter();
 				break;
@@ -157,7 +225,7 @@ public class GameSceneController : ApacheComponent {
 
 	private void StateMenuClose_Enter() {
 
-		gameMenuView.CloseMenu();
+		gameMenuView.SlideOffLeft();
 	}
 
 	private void StateTransitionToGame_Enter() {
@@ -169,6 +237,9 @@ public class GameSceneController : ApacheComponent {
 
 		GameGuiController.TimeView.SetRemainingTime(gameDuration);
 		GameGuiController.TimeView.PresentView();
+
+		GameGuiController.ScoreView.ResetValues();
+		GameGuiController.ScoreView.PresentView();
 
 		sequence.Do(transitionToGameDuration, () => {
 			ChangeStates(States.Game);
@@ -201,11 +272,51 @@ public class GameSceneController : ApacheComponent {
 		GameGuiController.TimeView.SetRemainingTime(0.0f);
 		GameGuiController.TimeView.DismissView();
 
+		GameGuiController.ScoreView.DismissView();
+
 		playerController.StopGame();
+
+		sequence.Do(gameEndDuration, () => {
+			ChangeStates(States.TransitionToOutroScreen);
+		});
+	}
+
+	private void StateTransitionToOutroScreen_Enter() {
+
+		outroScreenView.ShowHideView(true);
+		outroScreenView.SlideOnLeft();
+	}
+
+	private void StateOutroScreen_Enter() {
+
+		outroScreenView.StartProgress(playerController.TotalGoldFound, playerController.TotalScrapFound);
+	}
+
+	private void StateTransitionToReset_Enter() {
+
+		outroScreenView.SlideOffRight();
+	}
+
+	private void StateReset_Enter() {
+
+		playerController.ResetGame();
+
+		introCamera.Priority = 2;
+		introCamera.enabled = true;
+
+		sequence.Do(resetDuration, () => {
+			ChangeStates(States.TransitionToMenu);
+		});
+	}
+
+	private void StateTransitionToMenu_Enter() {
+
+		gameMenuView.SetButtonsEnabled(true);
+		gameMenuView.SlideOnLeft();
 	}
 
 	private void StateExit_Enter() {
 
-		gameMenuView.CloseMenu();
+		gameMenuView.SlideOffLeft();
 	}
 }

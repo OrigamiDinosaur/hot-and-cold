@@ -61,11 +61,25 @@ public class PlayerController : ApacheComponent {
 
 	private Treasure currentTreasure;
 
+	private Vector3 startingPosition;
+
+	private int totalGoldFound;
+	private int totalScrapFound; 
+
+	//-----------------------------------------------------------------------------------------
+	// Public Properties:
+	//-----------------------------------------------------------------------------------------
+
+	public int TotalGoldFound => totalGoldFound;
+	public int TotalScrapFound => totalScrapFound;
+
 	//-----------------------------------------------------------------------------------------
 	// Unity Lifecycle:
 	//-----------------------------------------------------------------------------------------
 
 	protected void Start() {
+
+		startingPosition = transform.position;
 
 		ChangeStates(States.Waiting);
 	}
@@ -89,6 +103,11 @@ public class PlayerController : ApacheComponent {
 
 	public void StopGame() {
 		ChangeStates(States.Ending);
+	}
+
+	public void ResetGame() {
+
+		transform.position = startingPosition;
 	}
 
 	public void UpdateMovement(Vector3 movementDirection) {
@@ -135,6 +154,7 @@ public class PlayerController : ApacheComponent {
 
 			AudioSource.PlayClipAtPoint(treasureFoundSfx, transform.position);
 
+			CollectResources();
 			currentTreasure.Collected();
 		}
 		else {
@@ -156,6 +176,7 @@ public class PlayerController : ApacheComponent {
 
 		switch (state) {
 			case States.Gameplay:
+				StateGameplay_Enter();
 				break;
 			case States.Ending:
 				StateEnding_Enter();
@@ -172,6 +193,12 @@ public class PlayerController : ApacheComponent {
 		}
 	}
 
+	private void StateGameplay_Enter() {
+
+		totalGoldFound = 0;
+		totalScrapFound = 0;
+	}
+
 	private void StateGameplay_Update() {
 
 		cc.Move(Vector3.down * 9.98f * Time.deltaTime);
@@ -179,5 +206,25 @@ public class PlayerController : ApacheComponent {
 
 	private void StateEnding_Enter() {
 		animator.SetFloat(SPEED_PARAMETER, 0.0f);
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Private Methods:
+	//-----------------------------------------------------------------------------------------
+
+	private void CollectResources() {
+
+		ItemValue itemValue = currentTreasure.TreasureAsset.ItemValue;
+
+		switch (itemValue.currency) {
+			case Currencies.Gold:
+				totalGoldFound += itemValue.value;
+				GameGuiController.ScoreView.SetGoldValue(totalGoldFound);
+				break;
+			case Currencies.Scrap:
+				totalScrapFound += itemValue.value; 
+				GameGuiController.ScoreView.SetScrapValue(totalScrapFound);
+				break;
+		}
 	}
 }

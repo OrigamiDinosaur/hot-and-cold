@@ -1,19 +1,20 @@
 using Apache.Core;
-using TMPro;
 using UnityEngine;
 
-public class TimeView : ApacheComponent {
+public class GuiView : ApacheComponent {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
 	//-----------------------------------------------------------------------------------------
 
-	[SerializeField] protected TextMeshProUGUI timeRemainingText;
+	[Header("References")]
 
 	[SerializeField] protected CanvasGroup canvasGroup;
 
+	[Header("Transitions")]
+	
 	[SerializeField] protected float presentDuration;
-	[SerializeField] protected float dismissDuration; 
+	[SerializeField] protected float dismissDuration;
 
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
@@ -29,11 +30,6 @@ public class TimeView : ApacheComponent {
 
 		sequence.Tween(LeanTween.value(gameObject, SetAlpha, 1.0f, 0.0f, dismissDuration)
 			.setEase(LeanTweenType.easeInQuad));
-	}
-
-	public void SetRemainingTime(float remainingTime) {
-
-		timeRemainingText.text = remainingTime.ToString("F2"); 
 	}
 
 	//-----------------------------------------------------------------------------------------
