@@ -12,6 +12,8 @@ public class GameSceneController : MonoBehaviour {
 		PreInit,
 		Menu,
 		MenuClose,
+		TransitionToShop,
+		Shop,
 		TransitionToGame,
 		Game,
 		GameEnd,
@@ -58,7 +60,8 @@ public class GameSceneController : MonoBehaviour {
 	private States state = States.PreInit;
 
 	private GameMenuView gameMenuView;
-	private OutroScreenView outroScreenView; 
+	private OutroScreenView outroScreenView;
+	private ShopMenuView shopMenuView;
 
 	private float gameStartTime;
 	private float gameEndTime;
@@ -81,13 +84,17 @@ public class GameSceneController : MonoBehaviour {
 		outroScreenView = GameGuiController.OutroScreenView;
 
 		outroScreenView.TransitionCompleted += OutroScreenView_TransitionCompleted;
-		outroScreenView.ValuesPresented += OutroScreenView_ValuesPresented; 
+		outroScreenView.ValuesPresented += OutroScreenView_ValuesPresented;
+
+		shopMenuView = GameGuiController.ShopMenuView;
 	}
 
 	protected void Start() {
 
 		sequence = new GameSequence(this);
 		
+		InitGameState();
+
 		ChangeStates(States.Menu);
 	}
 
@@ -119,6 +126,8 @@ public class GameSceneController : MonoBehaviour {
 
 	private void MenuView_ShopButtonClicked() {
 		if (state != States.Menu) return; 
+
+		ChangeStates(States.TransitionToShop);
 	}
 
 	private void MenuView_ExitButtonClicked() {
@@ -185,6 +194,12 @@ public class GameSceneController : MonoBehaviour {
 			case States.MenuClose:
 				StateMenuClose_Enter();
 				break;
+			case States.TransitionToShop:
+				StateTransitionToShop_Enter();
+				break;
+			case States.Shop:
+				StateShop_Enter();
+				break;
 			case States.TransitionToGame:
 				StateTransitionToGame_Enter();
 				break;
@@ -228,6 +243,21 @@ public class GameSceneController : MonoBehaviour {
 	private void StateMenuClose_Enter() {
 
 		gameMenuView.SlideOffLeft();
+	}
+
+	private void StateTransitionToShop_Enter() {
+
+		gameMenuView.SlideOffLeft();
+
+		shopMenuView.SetCurrencyValues(playerController.TotalGoldFound, playerController.TotalScrapFound);
+
+		shopMenuView.ShowHideView(true);
+		shopMenuView.SlideOnRight();
+	}
+
+	private void StateShop_Enter() {
+
+		shopMenuView.SetButtonsEnabled(true); 
 	}
 
 	private void StateTransitionToGame_Enter() {
@@ -320,5 +350,18 @@ public class GameSceneController : MonoBehaviour {
 	private void StateExit_Enter() {
 
 		gameMenuView.SlideOffLeft();
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Private Methods:
+	//-----------------------------------------------------------------------------------------
+
+	void InitGameState() {
+
+		// reset our values
+		GameState.ResetGold();
+		GameState.ResetScrap();
+
+		// todo: add gold and scrap from save. 
 	}
 }

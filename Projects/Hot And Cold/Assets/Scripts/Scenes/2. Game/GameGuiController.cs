@@ -11,6 +11,7 @@ public class GameGuiController : ComponentSingleton<GameGuiController> {
 	[SerializeField] protected TimeView timeView;
 	[SerializeField] protected ScoreView scoreView; 
 	[SerializeField] protected GameMenuView gameMenuView;
+	[SerializeField] protected ShopMenuView shopMenuView; 
 	[SerializeField] protected OutroScreenView outroScreenView;
 
 	//-----------------------------------------------------------------------------------------
@@ -22,5 +23,6 @@ public class GameGuiController : ComponentSingleton<GameGuiController> {
 	public static TimeView TimeView => Instance.timeView;
 	public static ScoreView ScoreView => Instance.scoreView; 
 	public static GameMenuView GameMenuView => Instance.gameMenuView;
+	public static ShopMenuView ShopMenuView => Instance.shopMenuView;
 	public static OutroScreenView OutroScreenView => Instance.outroScreenView; 
 }

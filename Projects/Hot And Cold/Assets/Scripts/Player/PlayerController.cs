@@ -205,6 +205,9 @@ public class PlayerController : MonoBehaviour {
 
 	private void StateEnding_Enter() {
 		animator.SetFloat(SPEED_PARAMETER, 0.0f);
+
+		GameState.AddGold(totalGoldFound);
+		GameState.AddScrap(totalScrapFound);
 	}
 
 	//-----------------------------------------------------------------------------------------
