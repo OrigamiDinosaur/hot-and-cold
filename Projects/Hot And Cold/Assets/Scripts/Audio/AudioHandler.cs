@@ -1,8 +1,7 @@
-using Apache.Core;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
-public class AudioHandler : ComponentSingletonProtected<AudioHandler> {
+public class AudioHandler : ComponentSingleton<AudioHandler> {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:

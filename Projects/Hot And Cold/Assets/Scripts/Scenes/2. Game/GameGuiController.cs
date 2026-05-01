@@ -1,7 +1,6 @@
-using Apache.Core;
 using UnityEngine;
 
-public class GameGuiController : ComponentSingletonProtected<GameGuiController> {
+public class GameGuiController : ComponentSingleton<GameGuiController> {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:

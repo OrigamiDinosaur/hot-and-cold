@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-public class MainSceneController : SceneControllerBase {
+public class MainSceneController : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:

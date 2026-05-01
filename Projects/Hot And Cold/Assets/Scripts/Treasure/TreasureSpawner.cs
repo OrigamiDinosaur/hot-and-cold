@@ -1,7 +1,6 @@
-using Apache.Core;
 using UnityEngine;
 
-public class TreasureSpawner : ApacheComponent {
+public class TreasureSpawner : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -94,14 +93,5 @@ public class TreasureSpawner : ApacheComponent {
 				break; 
 			}
 		}
-	}
-
-	//-----------------------------------------------------------------------------------------
-	// Editor Methods:
-	//-----------------------------------------------------------------------------------------
-
-	[ApacheButton]
-	public void ForceSpawn() {
-		SpawnTreasure();
 	}
 } 

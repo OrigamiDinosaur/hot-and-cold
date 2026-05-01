@@ -1,4 +1,3 @@
-using Apache.Core;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,7 +8,7 @@ public class ItemValue {
 }
 
 [CreateAssetMenu(fileName = SCRIPTABLE_OBJECT_NAME, menuName = MENU_NAME_PREFIX + SCRIPTABLE_OBJECT_NAME, order = MENU_STARTING_ORDER + 12)]
-public class TreasureAsset : ApacheScriptableObject {
+public class TreasureAsset : ScriptableObjectBase {
 
 	//-----------------------------------------------------------------------------------------
 	// Constants:

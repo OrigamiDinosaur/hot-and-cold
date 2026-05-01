@@ -1,7 +1,6 @@
-using Apache.Core;
 using UnityEngine;
 
-public class InputHandler : ApacheComponent {
+public class InputHandler : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:

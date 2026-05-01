@@ -1,8 +1,7 @@
-using Apache.Core;
 using TMPro;
 using UnityEngine;
 
-public class TreasureWarmthView : ApacheComponent {
+public class TreasureWarmthView : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -17,6 +16,20 @@ public class TreasureWarmthView : ApacheComponent {
 	[SerializeField] protected float presentDuration;
 	[SerializeField] protected float dismissDelay;
 	[SerializeField] protected float dismissDuration; 
+
+	//-----------------------------------------------------------------------------------------
+	// Private Fields:
+	//-----------------------------------------------------------------------------------------
+
+	private GameSequence sequence;
+
+	//-----------------------------------------------------------------------------------------
+	// Unity Lifecycle:
+	//-----------------------------------------------------------------------------------------
+
+	protected void Start() {
+		sequence = new GameSequence(this); 
+	}
 
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:

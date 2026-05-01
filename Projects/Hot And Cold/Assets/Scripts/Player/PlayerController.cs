@@ -1,4 +1,3 @@
-using Apache.Core;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
@@ -10,7 +9,7 @@ public class RangeValue {
 }
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : ApacheComponent {
+public class PlayerController : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Constants:

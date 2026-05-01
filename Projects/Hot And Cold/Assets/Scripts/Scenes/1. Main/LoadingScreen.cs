@@ -1,8 +1,7 @@
-using Apache.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingScreen : ApacheComponent {
+public class LoadingScreen : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:

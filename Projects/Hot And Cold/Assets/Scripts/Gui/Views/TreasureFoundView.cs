@@ -1,9 +1,8 @@
-using Apache.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TreasureFoundView : ApacheComponent {
+public class TreasureFoundView : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Constants:
@@ -35,6 +34,21 @@ public class TreasureFoundView : ApacheComponent {
 	[Header("Dev")]
 
 	[SerializeField] protected TreasureAsset asset;
+
+	//-----------------------------------------------------------------------------------------
+	// Private Fields:
+	//-----------------------------------------------------------------------------------------
+
+	private GameSequence sequence;
+
+	//-----------------------------------------------------------------------------------------
+	// Unity Lifecycle:
+	//-----------------------------------------------------------------------------------------
+
+	protected void Start() {
+
+		sequence = new GameSequence(this);
+	}
 
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
@@ -70,15 +84,5 @@ public class TreasureFoundView : ApacheComponent {
 
 	private void SetAlpha(float t) {
 		canvasGroup.alpha = t;
-	}
-
-	//-----------------------------------------------------------------------------------------
-	// Editor Methods:
-	//-----------------------------------------------------------------------------------------
-
-	[ApacheButton]
-	public void ShowDialogue() {
-
-		ShowTreasureFoundDialogue(asset);
 	}
 }

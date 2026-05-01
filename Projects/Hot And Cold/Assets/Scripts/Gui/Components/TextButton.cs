@@ -1,7 +1,5 @@
-using Apache.Core;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 [System.Serializable]
 public class TextOptions {
@@ -11,7 +9,7 @@ public class TextOptions {
 	public Color color; 
 }
 
-public class TextButton : ApacheComponent {
+public class TextButton : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:

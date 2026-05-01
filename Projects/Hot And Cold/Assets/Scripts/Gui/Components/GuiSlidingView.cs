@@ -1,9 +1,7 @@
 using System;
-using Apache.Core;
-using Apache.Core.Extensions;
 using UnityEngine;
 
-public class GuiSlidingView : ApacheComponent {
+public class GuiSlidingView : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Events:
@@ -52,6 +50,8 @@ public class GuiSlidingView : ApacheComponent {
 	// Private Fields:
 	//-----------------------------------------------------------------------------------------
 
+	private GameSequence sequence;
+
 	private float startingX;
 
 	//-----------------------------------------------------------------------------------------
@@ -59,6 +59,9 @@ public class GuiSlidingView : ApacheComponent {
 	//-----------------------------------------------------------------------------------------
 
 	protected void Start() {
+
+		sequence = new GameSequence(this); 
+
 		startingX = rect.anchoredPosition.x;
 
 		switch (startingState) {

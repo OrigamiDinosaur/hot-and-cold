@@ -1,5 +1,3 @@
-using Apache.Core;
-using UnityEngine;
 
 public class GameState : Singleton<GameState> {
 

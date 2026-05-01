@@ -1,8 +1,7 @@
 using System;
-using Apache.Core;
 using UnityEngine;
 
-public class Treasure : ApacheComponent {
+public class Treasure : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Events:

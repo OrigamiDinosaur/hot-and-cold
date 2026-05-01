@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "co.uk.apache.library.core": {
-      "version": "file:co.uk.apache.library.core",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.addressables": {
       "version": "1.21.21",
       "depth": 0,

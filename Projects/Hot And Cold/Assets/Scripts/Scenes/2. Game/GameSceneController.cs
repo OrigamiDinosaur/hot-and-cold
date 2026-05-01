@@ -1,10 +1,8 @@
-using System;
-using Apache.Core;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameSceneController : ApacheComponent {
+public class GameSceneController : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Type Definitions:
@@ -65,6 +63,8 @@ public class GameSceneController : ApacheComponent {
 	private float gameStartTime;
 	private float gameEndTime;
 
+	private GameSequence sequence;
+
 	//-----------------------------------------------------------------------------------------
 	// Unity Lifecycle:
 	//-----------------------------------------------------------------------------------------
@@ -85,6 +85,8 @@ public class GameSceneController : ApacheComponent {
 	}
 
 	protected void Start() {
+
+		sequence = new GameSequence(this);
 		
 		ChangeStates(States.Menu);
 	}

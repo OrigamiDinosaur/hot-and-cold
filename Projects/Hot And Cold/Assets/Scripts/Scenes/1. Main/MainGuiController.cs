@@ -1,8 +1,7 @@
 using System;
-using Apache.Core;
 using UnityEngine;
 
-public class MainGuiController : ApacheComponent {
+public class MainGuiController : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Events:

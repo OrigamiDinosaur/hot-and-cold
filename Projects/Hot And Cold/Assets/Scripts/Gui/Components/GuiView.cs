@@ -1,7 +1,6 @@
-using Apache.Core;
 using UnityEngine;
 
-public class GuiView : ApacheComponent {
+public class GuiView : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -15,6 +14,20 @@ public class GuiView : ApacheComponent {
 	
 	[SerializeField] protected float presentDuration;
 	[SerializeField] protected float dismissDuration;
+
+	//-----------------------------------------------------------------------------------------
+	// Private Fields:
+	//-----------------------------------------------------------------------------------------
+
+	private GameSequence sequence;
+
+	//-----------------------------------------------------------------------------------------
+	// Unity Lifecycle:
+	//-----------------------------------------------------------------------------------------
+
+	protected void Start() {
+		sequence = new GameSequence(this); 
+	}
 
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
