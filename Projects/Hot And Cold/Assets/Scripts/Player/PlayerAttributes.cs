@@ -1,10 +1,14 @@
-[System.Serializable]
-public class SaveData {
+using UnityEngine;
+
+public struct PlayerAttributes {
 
 	//-----------------------------------------------------------------------------------------
-	// Public Fields:
+	// Public Properties:
 	//-----------------------------------------------------------------------------------------
 
-	public int PlayerGold;
-	public int PlayerScrap; 
+	public float DrillValue;
+	public float MoveSpeed;
+
+	public float GoldBonus;
+	public float ScrapBonus;
 }

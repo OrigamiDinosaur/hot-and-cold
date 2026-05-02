@@ -64,17 +64,7 @@ public class GuiSlidingView : MonoBehaviour {
 
 		startingX = rect.anchoredPosition.x;
 
-		switch (startingState) {
-			case States.Left:
-				rect.anchoredPosition = rect.anchoredPosition.WithX(startingX - rect.rect.width);
-				break;
-			case States.Centre:
-				rect.anchoredPosition = rect.anchoredPosition.WithX(startingX);
-				break;
-			case States.Right:
-				rect.anchoredPosition = rect.anchoredPosition.WithX(startingX + rect.rect.width);
-				break;
-		}
+		ConfigureForStartingState();
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -85,33 +75,60 @@ public class GuiSlidingView : MonoBehaviour {
 
 		sequence.Tween(LeanTween.value(gameObject, SetRectPositionX, startingX, startingX - rect.rect.width, slideOffLeftDuration)
 			.setEase(slideOffLeftLeanType)
-			.setOnComplete(() => { TransitionCompleted?.Invoke(); }));
+			.setOnComplete(() => {
+				OnTransitionCompleted();
+				TransitionCompleted?.Invoke();
+			}));
 	}
 
 	public void SlideOnLeft() {
 
 		sequence.Tween(LeanTween.value(gameObject, SetRectPositionX, startingX - rect.rect.width, startingX, slideOnLeftDuration)
 			.setEase(slideOnLeftLeanType)
-			.setOnComplete(() => { TransitionCompleted?.Invoke(); }));
+			.setOnComplete(() => {
+				OnTransitionCompleted();
+				TransitionCompleted?.Invoke();
+			}));
 	}
 
 	public void SlideOffRight() {
 
 		sequence.Tween(LeanTween.value(gameObject, SetRectPositionX, startingX, startingX + rect.rect.width, slideOffRightDuration)
 			.setEase(slideOffRightLeanType)
-			.setOnComplete(() => { TransitionCompleted?.Invoke(); }));
+			.setOnComplete(() => {
+				OnTransitionCompleted();
+				TransitionCompleted?.Invoke();
+			}));
 	}
 
 	public void SlideOnRight() {
 
 		sequence.Tween(LeanTween.value(gameObject, SetRectPositionX, startingX + rect.rect.width, startingX, slideOnRightDuration)
 			.setEase(slideOnRightLeanType)
-			.setOnComplete(() => { TransitionCompleted?.Invoke(); }));
+			.setOnComplete(() => {
+				OnTransitionCompleted();
+				TransitionCompleted?.Invoke();
+			}));
 	}
 
 	public void ShowHideView(bool shouldShow) {
 		SetAlpha(shouldShow ? 1.0f : 0.0f);
 	}
+
+	public void SetInteractable(bool isInteractable) {
+		canvasGroup.blocksRaycasts = isInteractable;
+		canvasGroup.interactable = isInteractable; 
+	}
+
+	public void ResetState() {
+		ConfigureForStartingState();
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Protected Methods:
+	//-----------------------------------------------------------------------------------------
+
+	protected virtual void OnTransitionCompleted() { }
 
 	//-----------------------------------------------------------------------------------------
 	// Private Methods:
@@ -123,5 +140,20 @@ public class GuiSlidingView : MonoBehaviour {
 
 	private void SetAlpha(float t) {
 		canvasGroup.alpha = t; 
+	}
+
+	private void ConfigureForStartingState() {
+
+		switch (startingState) {
+			case States.Left:
+				rect.anchoredPosition = rect.anchoredPosition.WithX(startingX - rect.rect.width);
+				break;
+			case States.Centre:
+				rect.anchoredPosition = rect.anchoredPosition.WithX(startingX);
+				break;
+			case States.Right:
+				rect.anchoredPosition = rect.anchoredPosition.WithX(startingX + rect.rect.width);
+				break;
+		}
 	}
 }

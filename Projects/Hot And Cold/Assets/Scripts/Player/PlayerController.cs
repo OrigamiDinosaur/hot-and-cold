@@ -56,7 +56,9 @@ public class PlayerController : MonoBehaviour {
 	// Private Fields:
 	//-----------------------------------------------------------------------------------------
 
-	private States state = States.PreInit; 
+	private States state = States.PreInit;
+
+	private PlayerAttributes currentAttributes;
 
 	private Treasure currentTreasure;
 
@@ -89,12 +91,20 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	//-----------------------------------------------------------------------------------------
-	// Public Methods:
+	// Getters / Setters:
 	//-----------------------------------------------------------------------------------------
 
 	public void SetTreasure(Treasure inTreasure) {
 		currentTreasure = inTreasure;
 	}
+
+	public void SetCurrentAttributes(PlayerAttributes inAttributes) {
+		currentAttributes = inAttributes;
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Public Methods:
+	//-----------------------------------------------------------------------------------------
 
 	public void StartGame() {
 		ChangeStates(States.Gameplay);
@@ -209,7 +219,7 @@ public class PlayerController : MonoBehaviour {
 		GameState.AddGold(totalGoldFound);
 		GameState.AddScrap(totalScrapFound);
 
-		SaveDataHandler.Save();
+		GameState.SaveData();
 	}
 
 	//-----------------------------------------------------------------------------------------

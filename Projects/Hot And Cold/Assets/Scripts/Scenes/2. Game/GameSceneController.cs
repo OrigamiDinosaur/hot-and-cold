@@ -87,6 +87,8 @@ public class GameSceneController : MonoBehaviour {
 		outroScreenView.ValuesPresented += OutroScreenView_ValuesPresented;
 
 		shopMenuView = GameGuiController.ShopMenuView;
+
+		shopMenuView.BackButtonClicked += ShopView_BackButtonClicked;
 	}
 
 	protected void Start() {
@@ -112,6 +114,8 @@ public class GameSceneController : MonoBehaviour {
 
 		outroScreenView.TransitionCompleted -= OutroScreenView_TransitionCompleted;
 		outroScreenView.ValuesPresented -= OutroScreenView_ValuesPresented;
+
+		shopMenuView.BackButtonClicked -= ShopView_BackButtonClicked;
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -159,6 +163,10 @@ public class GameSceneController : MonoBehaviour {
 				ChangeStates(States.Menu); 
 				break;
 		}
+	}
+
+	private void ShopView_BackButtonClicked() {
+		ChangeStates(States.TransitionToMenu);
 	}
 
 	private void OutroScreenView_TransitionCompleted() {
@@ -249,15 +257,14 @@ public class GameSceneController : MonoBehaviour {
 
 		gameMenuView.SlideOffLeft();
 
-		shopMenuView.SetCurrencyValues(GameState.PlayerGold, GameState.PlayerScrap);
+		shopMenuView.SetCurrencyValues(GameState.GameData.PlayerGold, GameState.GameData.PlayerScrap);
 
-		shopMenuView.ShowHideView(true);
-		shopMenuView.SlideOnRight();
+		shopMenuView.PresentShop();
 	}
 
 	private void StateShop_Enter() {
 
-		shopMenuView.SetButtonsEnabled(true); 
+		//shopMenuView.SetButtonsEnabled(true); 
 	}
 
 	private void StateTransitionToGame_Enter() {

@@ -26,7 +26,6 @@ public class TextButton : MonoBehaviour {
 	[SerializeField] protected TextOptions hoveredStyle;
 	[SerializeField] protected TextOptions pressedStyle;
 
-	
 	//-----------------------------------------------------------------------------------------
 	// Private Fields:
 	//-----------------------------------------------------------------------------------------

@@ -45,12 +45,16 @@ public class OriButton : Button {
 	public override void OnPointerDown(PointerEventData pointerEventData) {
 		base.OnPointerDown(pointerEventData);
 
+		if (!IsInteractable()) return;
+
 		AudioHandler.PlayButtonDownSfx();
 		PointerDown?.Invoke();
 	}
 
 	public override void OnPointerUp(PointerEventData pointerEventData) {
 		base.OnPointerUp(pointerEventData);
+
+		if (!IsInteractable()) return;
 
 		AudioHandler.PlayButtonUpSfx();
 		PointerUp?.Invoke();
