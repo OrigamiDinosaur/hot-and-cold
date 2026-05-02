@@ -208,6 +208,8 @@ public class PlayerController : MonoBehaviour {
 
 		GameState.AddGold(totalGoldFound);
 		GameState.AddScrap(totalScrapFound);
+
+		SaveDataHandler.Save();
 	}
 
 	//-----------------------------------------------------------------------------------------

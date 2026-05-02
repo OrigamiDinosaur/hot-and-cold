@@ -93,7 +93,7 @@ public class GameSceneController : MonoBehaviour {
 
 		sequence = new GameSequence(this);
 		
-		InitGameState();
+		GameState.Init();
 
 		ChangeStates(States.Menu);
 	}
@@ -249,7 +249,7 @@ public class GameSceneController : MonoBehaviour {
 
 		gameMenuView.SlideOffLeft();
 
-		shopMenuView.SetCurrencyValues(playerController.TotalGoldFound, playerController.TotalScrapFound);
+		shopMenuView.SetCurrencyValues(GameState.PlayerGold, GameState.PlayerScrap);
 
 		shopMenuView.ShowHideView(true);
 		shopMenuView.SlideOnRight();
@@ -350,18 +350,5 @@ public class GameSceneController : MonoBehaviour {
 	private void StateExit_Enter() {
 
 		gameMenuView.SlideOffLeft();
-	}
-
-	//-----------------------------------------------------------------------------------------
-	// Private Methods:
-	//-----------------------------------------------------------------------------------------
-
-	void InitGameState() {
-
-		// reset our values
-		GameState.ResetGold();
-		GameState.ResetScrap();
-
-		// todo: add gold and scrap from save. 
 	}
 }
