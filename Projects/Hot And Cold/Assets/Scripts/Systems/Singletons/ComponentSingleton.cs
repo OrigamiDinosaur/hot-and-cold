@@ -1,6 +1,13 @@
+using System;
 using UnityEngine;
 
 public class ComponentSingleton<T> : MonoBehaviour where T : MonoBehaviour {
+
+	//-----------------------------------------------------------------------------------------
+	// Events:
+	//-----------------------------------------------------------------------------------------
+
+	public static event Action SingletonDestroyed; 
 
 	//-----------------------------------------------------------------------------------------
 	// Backing Fields:
@@ -61,6 +68,8 @@ public class ComponentSingleton<T> : MonoBehaviour where T : MonoBehaviour {
 			
 		// if we're a duplicate instance, don't try to clear out our instance field, as we wouldn't have changed it.
 		if (isDuplicateInstance) return;
+
+		SingletonDestroyed?.Invoke();
 		
 		_instance = null;
 	}

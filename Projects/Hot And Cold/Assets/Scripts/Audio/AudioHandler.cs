@@ -11,6 +11,7 @@ public class AudioHandler : ComponentSingleton<AudioHandler> {
 	[SerializeField] protected AudioClip buttonUpClip; 
 	[SerializeField] protected AudioClip buttonHoveredClip;
 	[SerializeField] protected AudioClip buttonUnhoveredClip;
+	[SerializeField] protected AudioClip buttonDisabledClip; 
 
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
@@ -30,5 +31,9 @@ public class AudioHandler : ComponentSingleton<AudioHandler> {
 
 	public static void PlayButtonUnhoveredSfx() {
 		AudioSource.PlayClipAtPoint(Instance.buttonUnhoveredClip, Vector3.zero);
+	}
+
+	public static void PlayButtonDisabledSfx() {
+		AudioSource.PlayClipAtPoint(Instance.buttonDisabledClip, Vector3.zero); 
 	}
 }

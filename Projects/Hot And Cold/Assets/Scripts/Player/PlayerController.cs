@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] protected CharacterController cc;
 	[SerializeField] protected Animator animator; 
 	[SerializeField] protected Transform robotRoot;
+	[SerializeField] protected Transform hatRoot;
 
 	[Header("Movement")]
 

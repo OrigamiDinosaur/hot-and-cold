@@ -32,6 +32,7 @@ public class GameSceneController : MonoBehaviour {
 	[Header("References")]
 
 	[SerializeField] protected TreasureSpawner treasureSpawner;
+	[SerializeField] protected UpgradeHandler upgradeHandler;
 	[SerializeField] protected PlayerController playerController;
 
 	[SerializeField] protected CinemachineCamera introCamera;
@@ -58,37 +59,31 @@ public class GameSceneController : MonoBehaviour {
 	//-----------------------------------------------------------------------------------------
 
 	private States state = States.PreInit;
-
-	private GameMenuView gameMenuView;
-	private OutroScreenView outroScreenView;
-	private ShopMenuView shopMenuView;
-
+	
 	private float gameStartTime;
 	private float gameEndTime;
 
 	private GameSequence sequence;
+
+	private bool hasUnsubbedGameGuiStaticEvents;
 
 	//-----------------------------------------------------------------------------------------
 	// Unity Lifecycle:
 	//-----------------------------------------------------------------------------------------
 
 	protected void OnEnable() {
+		
+		GameGuiController.GameMenuView.PlayButtonClicked += MenuView_PlayButtonClicked;
+		GameGuiController.GameMenuView.ShopButtonClicked += MenuView_ShopButtonClicked;
+		GameGuiController.GameMenuView.ExitButtonClicked += MenuView_ExitButtonClicked;
+		GameGuiController.GameMenuView.TransitionCompleted += MenuView_TransitionCompleted;
+		
+		GameGuiController.OutroScreenView.TransitionCompleted += OutroScreenView_TransitionCompleted;
+		GameGuiController.OutroScreenView.ValuesPresented += OutroScreenView_ValuesPresented;
+		
+		GameGuiController.ShopMenuView.BackButtonClicked += ShopView_BackButtonClicked;
 
-		gameMenuView = GameGuiController.GameMenuView;
-
-		gameMenuView.PlayButtonClicked += MenuView_PlayButtonClicked;
-		gameMenuView.ShopButtonClicked += MenuView_ShopButtonClicked;
-		gameMenuView.ExitButtonClicked += MenuView_ExitButtonClicked;
-		gameMenuView.TransitionCompleted += MenuView_TransitionCompleted;
-
-		outroScreenView = GameGuiController.OutroScreenView;
-
-		outroScreenView.TransitionCompleted += OutroScreenView_TransitionCompleted;
-		outroScreenView.ValuesPresented += OutroScreenView_ValuesPresented;
-
-		shopMenuView = GameGuiController.ShopMenuView;
-
-		shopMenuView.BackButtonClicked += ShopView_BackButtonClicked;
+		GameGuiController.SingletonDestroyed += GameGuiController_SingletonDestroyed;
 	}
 
 	protected void Start() {
@@ -96,6 +91,7 @@ public class GameSceneController : MonoBehaviour {
 		sequence = new GameSequence(this);
 		
 		GameState.Init();
+		upgradeHandler.Init();
 
 		ChangeStates(States.Menu);
 	}
@@ -106,16 +102,7 @@ public class GameSceneController : MonoBehaviour {
 	}
 
 	protected void OnDisable() {
-
-		gameMenuView.PlayButtonClicked -= MenuView_PlayButtonClicked;
-		gameMenuView.ShopButtonClicked -= MenuView_ShopButtonClicked;
-		gameMenuView.ExitButtonClicked -= MenuView_ExitButtonClicked;
-		gameMenuView.TransitionCompleted -= MenuView_TransitionCompleted;
-
-		outroScreenView.TransitionCompleted -= OutroScreenView_TransitionCompleted;
-		outroScreenView.ValuesPresented -= OutroScreenView_ValuesPresented;
-
-		shopMenuView.BackButtonClicked -= ShopView_BackButtonClicked;
+		UnsubGameGuiStaticEvents();
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -187,6 +174,10 @@ public class GameSceneController : MonoBehaviour {
 		ChangeStates(States.TransitionToReset);
 	}
 
+	private void GameGuiController_SingletonDestroyed() {
+		UnsubGameGuiStaticEvents();
+	}
+
 	//-----------------------------------------------------------------------------------------
 	// State Methods:
 	//-----------------------------------------------------------------------------------------
@@ -250,16 +241,16 @@ public class GameSceneController : MonoBehaviour {
 
 	private void StateMenuClose_Enter() {
 
-		gameMenuView.SlideOffLeft();
+		GameGuiController.GameMenuView.SlideOffLeft();
 	}
 
 	private void StateTransitionToShop_Enter() {
 
-		gameMenuView.SlideOffLeft();
+		GameGuiController.GameMenuView.SlideOffLeft();
 
-		shopMenuView.SetCurrencyValues(GameState.GameData.PlayerGold, GameState.GameData.PlayerScrap);
+		GameGuiController.ShopMenuView.SetCurrencyValues(GameState.GameData.PlayerGold, GameState.GameData.PlayerScrap);
 
-		shopMenuView.PresentShop();
+		GameGuiController.ShopMenuView.PresentShop();
 	}
 
 	private void StateShop_Enter() {
@@ -322,18 +313,18 @@ public class GameSceneController : MonoBehaviour {
 
 	private void StateTransitionToOutroScreen_Enter() {
 
-		outroScreenView.ShowHideView(true);
-		outroScreenView.SlideOnLeft();
+		GameGuiController.OutroScreenView.ShowHideView(true);
+		GameGuiController.OutroScreenView.SlideOnLeft();
 	}
 
 	private void StateOutroScreen_Enter() {
 
-		outroScreenView.StartProgress(playerController.TotalGoldFound, playerController.TotalScrapFound);
+		GameGuiController.OutroScreenView.StartProgress(playerController.TotalGoldFound, playerController.TotalScrapFound);
 	}
 
 	private void StateTransitionToReset_Enter() {
 
-		outroScreenView.SlideOffRight();
+		GameGuiController.OutroScreenView.SlideOffRight();
 	}
 
 	private void StateReset_Enter() {
@@ -350,12 +341,34 @@ public class GameSceneController : MonoBehaviour {
 
 	private void StateTransitionToMenu_Enter() {
 
-		gameMenuView.SetButtonsEnabled(true);
-		gameMenuView.SlideOnLeft();
+		GameGuiController.GameMenuView.SetButtonsEnabled(true);
+		GameGuiController.GameMenuView.SlideOnLeft();
 	}
 
 	private void StateExit_Enter() {
 
-		gameMenuView.SlideOffLeft();
+		GameGuiController.GameMenuView.SlideOffLeft();
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Private Methods:
+	//-----------------------------------------------------------------------------------------
+
+	private void UnsubGameGuiStaticEvents() {
+		if (hasUnsubbedGameGuiStaticEvents) return;
+
+		GameGuiController.SingletonDestroyed -= GameGuiController_SingletonDestroyed;
+
+		GameGuiController.GameMenuView.PlayButtonClicked -= MenuView_PlayButtonClicked;
+		GameGuiController.GameMenuView.ShopButtonClicked -= MenuView_ShopButtonClicked;
+		GameGuiController.GameMenuView.ExitButtonClicked -= MenuView_ExitButtonClicked;
+		GameGuiController.GameMenuView.TransitionCompleted -= MenuView_TransitionCompleted;
+
+		GameGuiController.OutroScreenView.TransitionCompleted -= OutroScreenView_TransitionCompleted;
+		GameGuiController.OutroScreenView.ValuesPresented -= OutroScreenView_ValuesPresented;
+
+		GameGuiController.ShopMenuView.BackButtonClicked -= ShopView_BackButtonClicked;
+
+		hasUnsubbedGameGuiStaticEvents = true;
 	}
 }

@@ -31,10 +31,19 @@ public class ShopMenuView : GuiSlidingView {
 
 	[SerializeField] protected TextMeshProUGUI goldValueText;
 	[SerializeField] protected TextMeshProUGUI scrapValueText;
+
+	[SerializeField] protected UpgradeLine drillLine;
+	[SerializeField] protected UpgradeLine engineLine;
+
+	[SerializeField] protected HatLine hatLinePrototype;
 	
 	[SerializeField] protected GuiSlidingView selectionSubView;
 	[SerializeField] protected GuiSlidingView upgradesSubView;
 	[SerializeField] protected GuiSlidingView cosmeticsSubView;
+
+	[Header("Hats")]
+
+	[SerializeField] protected float distanceBetweenHatLines;
 
 	//-----------------------------------------------------------------------------------------
 	// Private Fields:
@@ -47,11 +56,17 @@ public class ShopMenuView : GuiSlidingView {
 	//-----------------------------------------------------------------------------------------
 
 	protected void OnEnable() {
-		selectionSubView.TransitionCompleted += SelectionSubView_TransitionCompleted; 
+		selectionSubView.TransitionCompleted += SelectionSubView_TransitionCompleted;
+
+		drillLine.UpgradeRequested += DrillLine_UpgradeRequested;
+		engineLine.UpgradeRequested += EngineLine_UpgradeRequested;
 	}
 
 	protected void OnDisable() {
-		selectionSubView.TransitionCompleted -= SelectionSubView_TransitionCompleted; 
+		selectionSubView.TransitionCompleted -= SelectionSubView_TransitionCompleted;
+
+		drillLine.UpgradeRequested -= DrillLine_UpgradeRequested;
+		engineLine.UpgradeRequested -= EngineLine_UpgradeRequested;
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -130,6 +145,14 @@ public class ShopMenuView : GuiSlidingView {
 		}
 	}
 
+	private void DrillLine_UpgradeRequested() {
+		DrillUpgradeRequested?.Invoke();
+	}
+
+	private void EngineLine_UpgradeRequested() {
+		EngineUpgradeRequested?.Invoke();
+	}
+
 	//-----------------------------------------------------------------------------------------
 	// Getters / Setters:
 	//-----------------------------------------------------------------------------------------
@@ -169,6 +192,41 @@ public class ShopMenuView : GuiSlidingView {
 
 		upgradesSubView.ShowHideView(false);
 		cosmeticsSubView.ShowHideView(false); 
+	}
+
+	public void SetDrillStats(int level, int goldCost, int scrapCost, bool canAffordCost) {
+
+		drillLine.SetUpgradeLevel(level);
+		drillLine.SetUpgradeCost(goldCost, scrapCost);
+		drillLine.SetCanAffordCost(canAffordCost);
+	}
+
+	public void SetEngineStats(int level, int goldCost, int scrapCost, bool canAffordCost) {
+
+		engineLine.SetUpgradeLevel(level);
+		engineLine.SetUpgradeCost(goldCost, scrapCost);
+		engineLine.SetCanAffordCost(canAffordCost);
+	}
+
+	public void CreateHatLines(HatAsset[] hatAssets) {
+
+		Vector2 baseAnchoredPosition = hatLinePrototype.GetComponent<RectTransform>().anchoredPosition;  
+
+		for (int i = 0; i < hatAssets.Length; i++) {
+
+			Vector2 anchoredPosition = baseAnchoredPosition;
+			anchoredPosition.y -= i * distanceBetweenHatLines;
+
+			HatLine hatLine = Instantiate(hatLinePrototype);
+			hatLine.SetAnchoredPosition(anchoredPosition);
+
+			hatLine.SetHatId(hatAssets[i].HatId);
+			hatLine.SetHatName(hatAssets[i].HatName);
+			hatLine.SetCost(hatAssets[i].GoldCost, hatAssets[i].ScrapCost);
+			hatLine.SetDescription(hatAssets[i].HatDescription);
+
+			hatLine.gameObject.SetActive(true);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------

@@ -74,6 +74,6 @@ public class UpgradeLine : MonoBehaviour {
 	}
 
 	public void SetCanAffordCost(bool canAffordCost) {
-		upgradeButton.interactable = canAffordCost; 
+		upgradeButton.SetInteractable(canAffordCost);
 	}
 }

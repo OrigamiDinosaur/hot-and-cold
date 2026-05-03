@@ -22,8 +22,16 @@ public class GameState : Singleton<GameState> {
 		GameData.PlayerGold += goldToAdd;
 	}
 
+	public static void RemoveGold(int goldToRemove) {
+		GameData.PlayerGold -= goldToRemove; 
+	}
+
 	public static void AddScrap(int scrapToAdd) {
 		GameData.PlayerScrap += scrapToAdd;
+	}
+
+	public static void RemoveScrap(int scrapToRemove) {
+		GameData.PlayerScrap -= scrapToRemove;
 	}
 
 	public static void SetDrillLevel(int level) {

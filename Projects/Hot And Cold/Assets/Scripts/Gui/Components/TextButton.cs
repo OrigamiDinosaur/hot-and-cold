@@ -25,6 +25,7 @@ public class TextButton : MonoBehaviour {
 	[SerializeField] protected TextOptions normalStyle;
 	[SerializeField] protected TextOptions hoveredStyle;
 	[SerializeField] protected TextOptions pressedStyle;
+	[SerializeField] protected TextOptions disabledStyle; 
 
 	//-----------------------------------------------------------------------------------------
 	// Private Fields:
@@ -40,7 +41,8 @@ public class TextButton : MonoBehaviour {
 		button.PointerEntered += Button_PointerEntered;
 		button.PointerExited += Button_PointerExited;
 		button.PointerDown += Button_PointerDown;
-		button.PointerUp += Button_PointerUp; 
+		button.PointerUp += Button_PointerUp;
+		button.InteractibilityChanged += Button_InteractabilityChanged; 
 	}
 
 	protected void Start() {
@@ -52,6 +54,7 @@ public class TextButton : MonoBehaviour {
 		button.PointerExited -= Button_PointerExited;
 		button.PointerDown -= Button_PointerDown;
 		button.PointerUp -= Button_PointerUp;
+		button.InteractibilityChanged -= Button_InteractabilityChanged; 
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -61,23 +64,43 @@ public class TextButton : MonoBehaviour {
 	private void Button_PointerEntered() {
 		isHovered = true;
 
+		if (!button.IsInteractable()) return; 
+
 		SetStyle(hoveredStyle);
 	}
 
 	private void Button_PointerExited() {
 		isHovered = false;
 
+		if (!button.IsInteractable()) return; 
+
 		SetStyle(normalStyle);
 	}
 
 	private void Button_PointerDown() {
+
+		if (!button.IsInteractable()) return; 
+
 		SetStyle(pressedStyle);
 	}
 
 	private void Button_PointerUp() {
-		SetStyle(isHovered ? hoveredStyle : pressedStyle);
+
+		if (!button.IsInteractable()) return; 
+
+		SetStyle(isHovered ? hoveredStyle : normalStyle);
 	}
 
+	public void Button_InteractabilityChanged(bool isInteractable) {
+
+		if (isInteractable) {
+			SetStyle(isHovered ? hoveredStyle : normalStyle);
+		}
+		else {
+			SetStyle(disabledStyle); 
+		}
+	}
+	
 	//-----------------------------------------------------------------------------------------
 	// Private Methods:
 	//-----------------------------------------------------------------------------------------

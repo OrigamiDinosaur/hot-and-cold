@@ -21,11 +21,11 @@ public class GameData {
 
 	public void ResetData() {
 
-		PlayerGold = 0;
-		PlayerScrap = 0;
+		PlayerGold = 1000;
+		PlayerScrap = 1000;
 
-		DrillLevel = 1;
-		EngineLevel = 1;
+		DrillLevel = 0;
+		EngineLevel = 0;
 
 		CurrentlyEquippedHat = -1; 
 	}

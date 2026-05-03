@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7027794915043535847
 MonoBehaviour:
@@ -48,3 +48,4 @@ MonoBehaviour:
   buttonUpClip: {fileID: 8300000, guid: 5f6fce5e73988c740a2597c668542fc5, type: 3}
   buttonHoveredClip: {fileID: 8300000, guid: 36481a91803dc334d97efaffc5fcfb0f, type: 3}
   buttonUnhoveredClip: {fileID: 8300000, guid: b8bd6ff70d0f90f49804381991cd556f, type: 3}
+  buttonDisabledClip: {fileID: 8300000, guid: 44976e18c8620f141978aef097d88bb0, type: 3}

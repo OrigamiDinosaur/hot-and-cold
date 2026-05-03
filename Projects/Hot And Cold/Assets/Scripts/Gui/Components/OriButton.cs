@@ -12,8 +12,10 @@ public class OriButton : Button {
 	public event Action PointerEntered;
 	public event Action PointerExited;
 	public event Action PointerDown;
+	public event Action DisabledPointerDown;
 	public event Action PointerUp;
 	public event Action PointerClicked;
+	public event BoolAction InteractibilityChanged;
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -25,7 +27,7 @@ public class OriButton : Button {
 	[SerializeField] protected AudioClip pointerUpClip; 
 	
 	//-----------------------------------------------------------------------------------------
-	// Protected Methods:
+	// Public Methods:
 	//-----------------------------------------------------------------------------------------
 
 	public override void OnPointerEnter(PointerEventData pointerEventData) {
@@ -45,7 +47,12 @@ public class OriButton : Button {
 	public override void OnPointerDown(PointerEventData pointerEventData) {
 		base.OnPointerDown(pointerEventData);
 
-		if (!IsInteractable()) return;
+		if (!IsInteractable()) {
+
+			AudioHandler.PlayButtonDisabledSfx();
+			DisabledPointerDown?.Invoke();
+			return; 
+		}
 
 		AudioHandler.PlayButtonDownSfx();
 		PointerDown?.Invoke();
@@ -63,6 +70,12 @@ public class OriButton : Button {
 	public override void OnPointerClick(PointerEventData eventData) {
 		base.OnPointerClick(eventData);
 		PointerClicked?.Invoke();
+	}
+
+	public void SetInteractable(bool isInteractable) {
+
+		InteractibilityChanged?.Invoke(isInteractable);
+		interactable = isInteractable; 
 	}
 
 }
