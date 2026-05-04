@@ -30,7 +30,7 @@ public class InputHandler : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
 
-			playerController.Search();
+			playerController.AttemptSearchOrDill();
 		}
 	}
 }

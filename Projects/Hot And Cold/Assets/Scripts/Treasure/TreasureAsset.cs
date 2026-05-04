@@ -25,6 +25,7 @@ public class TreasureAsset : ScriptableObjectBase {
 	[SerializeField] protected string itemName;
 	[SerializeField] protected Rarities itemRarity;
 	[SerializeField] protected ItemValue itemValue;
+	[SerializeField] protected int depthValue;
 
 	//-----------------------------------------------------------------------------------------
 	// Public Properties:
@@ -32,5 +33,6 @@ public class TreasureAsset : ScriptableObjectBase {
 
 	public string ItemName => itemName;
 	public Rarities ItemRarity => itemRarity;
-	public ItemValue ItemValue => itemValue; 
+	public ItemValue ItemValue => itemValue;
+	public int DepthValue => depthValue;
 }

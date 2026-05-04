@@ -17,3 +17,4 @@ MonoBehaviour:
   itemValue:
     currency: 0
     value: 200
+  depthValue: 30

@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour {
 	private enum States {
 		PreInit,
 		Waiting,
-		Gameplay,
+		Searching,
+		Drilling,
 		Ending
 	}
 
@@ -45,10 +46,15 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] protected string defaultSearchDescription;
 	[SerializeField] protected RangeValue[] searchRanges;
 
+	[Header("Drilling")]
+
+	[SerializeField] protected float drillRate;
+
 	[Header("Audio")]
 
-	[SerializeField] protected AudioClip pingSfx;
-	[SerializeField] protected AudioClip treasureFoundSfx;
+	[SerializeField] protected AudioSource pingSfx;
+	[SerializeField] protected AudioSource drillSfx;
+	[SerializeField] protected AudioSource treasureFoundSfx;
 
 	//-----------------------------------------------------------------------------------------
 	// Private Fields:
@@ -59,6 +65,9 @@ public class PlayerController : MonoBehaviour {
 	private PlayerAttributes currentAttributes;
 
 	private Treasure currentTreasure;
+	protected int currentDepthValue;
+
+	private float nextDrillTime;
 
 	private Vector3 startingPosition;
 
@@ -109,10 +118,17 @@ public class PlayerController : MonoBehaviour {
 	//-----------------------------------------------------------------------------------------
 
 	public void StartGame() {
-		ChangeStates(States.Gameplay);
+		
+		totalGoldFound = 0;
+		totalScrapFound = 0;
+
+		ChangeStates(States.Searching);
 	}
 
 	public void StopGame() {
+
+		if (state == States.Drilling) GameGuiController.DrillingView.DismissView();
+
 		ChangeStates(States.Ending);
 	}
 
@@ -122,7 +138,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void UpdateMovement(Vector3 movementDirection) {
-		if (state != States.Gameplay) return; 
+		if (state != States.Searching) return; 
 
 		if (movementDirection == Vector3.zero) {
 			animator.SetFloat(SPEED_PARAMETER, 0.0f);
@@ -137,8 +153,79 @@ public class PlayerController : MonoBehaviour {
 		cc.Move(movement);
 	}
 
-	public void Search() {
-		if (state != States.Gameplay) return; 
+	public void AttemptSearchOrDill() {
+		
+		if (state == States.Searching) {
+			Search();
+		}
+		else if (state == States.Drilling) {
+			Drill();
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// State Methods:
+	//-----------------------------------------------------------------------------------------
+
+	private void ChangeStates(States newState) {
+		if (newState == state) return;
+
+		state = newState;
+
+		switch (state) {
+			case States.Drilling:
+				StateDrilling_Enter();
+				break;
+			case States.Ending:
+				StateEnding_Enter();
+				break;
+		}
+	}
+
+	private void UpdateStates() {
+
+		switch (state) {
+			case States.Searching:
+				StateSearching_Update();
+				break;
+		}
+	}
+
+	private void StateSearching_Update() {
+
+		cc.Move(Vector3.down * 9.98f * Time.deltaTime);
+	}
+
+	private void StateDrilling_Enter() {
+
+		animator.SetFloat(SPEED_PARAMETER, 0.0f);
+
+		// set our depth value and update our gui.
+		currentDepthValue = currentTreasure.TreasureAsset.DepthValue;
+		GameGuiController.DrillingView.SetDepthValue(currentDepthValue);
+
+		// show the drill view.
+		GameGuiController.DrillingView.PresentView();
+
+		// set our first viable drill time. 
+		nextDrillTime = Time.time + drillRate;
+	}
+
+	private void StateEnding_Enter() {
+
+		animator.SetFloat(SPEED_PARAMETER, 0.0f);
+
+		GameState.AddGold(totalGoldFound);
+		GameState.AddScrap(totalScrapFound);
+
+		GameState.SaveData();
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Private Methods:
+	//-----------------------------------------------------------------------------------------
+
+	private void Search() {
 
 		Vector3 treasurePosition = currentTreasure.transform.position;
 		treasurePosition.y = transform.position.y;
@@ -161,72 +248,48 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		if (didFindTreasure) {
-			GameGuiController.TreasureFoundView.ShowTreasureFoundDialogue(currentTreasure.TreasureAsset);
+			
 
-			AudioSource.PlayClipAtPoint(treasureFoundSfx, transform.position);
-
-			CollectResources();
-			currentTreasure.Collected();
+			ChangeStates(States.Drilling);
 		}
 		else {
 
-			AudioSource.PlayClipAtPoint(pingSfx, transform.position);
+			pingSfx.Play();
 
 			GameGuiController.TreasureWarmthView.ShowTreasureWarmthDialogue(searchDescription);
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------
-	// State Methods:
-	//-----------------------------------------------------------------------------------------
+	private void Drill() {
+		
+		if (Time.time < nextDrillTime) return;
+		
+		nextDrillTime = Time.time + drillRate;
+		
+		// reduce our depth value
+		currentDepthValue -= (int)currentAttributes.DrillValue;
 
-	private void ChangeStates(States newState) {
-		if (newState == state) return;
+		// if we've finished drilling, find our treasure!
+		if (currentDepthValue <= 0) {
 
-		state = newState;
+			GameGuiController.DrillingView.DismissView();
+			GameGuiController.TreasureFoundView.ShowTreasureFoundDialogue(currentTreasure.TreasureAsset);
 
-		switch (state) {
-			case States.Gameplay:
-				StateGameplay_Enter();
-				break;
-			case States.Ending:
-				StateEnding_Enter();
-				break;
+			treasureFoundSfx.Play();
+
+			CollectResources();
+			currentTreasure.Collected();
+
+			ChangeStates(States.Searching); 
+		}
+
+		// otherwise drill!
+		else {
+
+			GameGuiController.DrillingView.SetDepthValue(currentDepthValue);
+			drillSfx.Play();
 		}
 	}
-
-	private void UpdateStates() {
-
-		switch (state) {
-			case States.Gameplay:
-				StateGameplay_Update();
-				break;
-		}
-	}
-
-	private void StateGameplay_Enter() {
-
-		totalGoldFound = 0;
-		totalScrapFound = 0;
-	}
-
-	private void StateGameplay_Update() {
-
-		cc.Move(Vector3.down * 9.98f * Time.deltaTime);
-	}
-
-	private void StateEnding_Enter() {
-		animator.SetFloat(SPEED_PARAMETER, 0.0f);
-
-		GameState.AddGold(totalGoldFound);
-		GameState.AddScrap(totalScrapFound);
-
-		GameState.SaveData();
-	}
-
-	//-----------------------------------------------------------------------------------------
-	// Private Methods:
-	//-----------------------------------------------------------------------------------------
 
 	private void CollectResources() {
 
@@ -243,4 +306,6 @@ public class PlayerController : MonoBehaviour {
 				break;
 		}
 	}
+
+	
 }
