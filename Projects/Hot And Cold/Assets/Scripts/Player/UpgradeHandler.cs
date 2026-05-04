@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class UpgradeHandler : MonoBehaviour {
@@ -34,6 +35,9 @@ public class UpgradeHandler : MonoBehaviour {
 		GameGuiController.ShopMenuView.DrillUpgradeRequested += ShopMenuView_DrillUpgradeRequested;
 		GameGuiController.ShopMenuView.EngineUpgradeRequested += ShopMenuView_EngineUpgradeRequested;
 
+		GameGuiController.ShopMenuView.HatPurchaseRequested += ShopMenuView_HatPurchaseRequested;
+		GameGuiController.ShopMenuView.HatEquipRequested += ShopMenuView_HatEquipRequested;
+
 		GameGuiController.SingletonDestroyed += GameGuiController_SingletonDestroyed;
 	}
 
@@ -45,7 +49,7 @@ public class UpgradeHandler : MonoBehaviour {
 	// Event Handlers:
 	//-----------------------------------------------------------------------------------------
 
-	protected void ShopMenuView_DrillUpgradeRequested() {
+	private void ShopMenuView_DrillUpgradeRequested() {
 
 		// get our current drill level. 
 		int currentDrillLevel = GameState.GameData.DrillLevel;
@@ -66,13 +70,10 @@ public class UpgradeHandler : MonoBehaviour {
 		// increment our drill level
 		GameState.SetDrillLevel(currentDrillLevel + 1); 
 
-		// finalise our upgrades.
-		// do both as we need to update costs of all upgrades
-		UpdateDrillAttributes();
-		UpdateEngineAttributes();
+		UpdateGuiAndSaveData();
 	}
 
-	protected void ShopMenuView_EngineUpgradeRequested() {
+	private void ShopMenuView_EngineUpgradeRequested() {
 
 		// get our current engine level. 
 		int currentEngineLevel = GameState.GameData.EngineLevel;
@@ -93,13 +94,46 @@ public class UpgradeHandler : MonoBehaviour {
 		// increment our engine level
 		GameState.SetEngineLevel(currentEngineLevel + 1); 
 
-		// finalise our upgrades.
-		// do both as we need to update costs of all upgrades
-		UpdateDrillAttributes();
-		UpdateEngineAttributes();
+		UpdateGuiAndSaveData();
 	}
 
-	protected void GameGuiController_SingletonDestroyed() {
+	private void ShopMenuView_HatPurchaseRequested(int hatId) {
+		if (GameState.GameData.UnlockedHatIds.Contains(hatId)) return;
+
+		// find our hat. 
+		foreach (HatAsset hatAsset in hatsAssets) {
+			if (hatAsset.HatId == hatId) {
+
+				// get our costs. 
+				int goldCost = hatAsset.GoldCost;
+				int scrapCost = hatAsset.ScrapCost;
+
+				// check we can afford it.
+				if (GameState.GameData.PlayerGold < goldCost || GameState.GameData.PlayerScrap < scrapCost) return;
+
+				// deduct our costs and update our gui. 
+				GameState.RemoveGold(goldCost);
+				GameState.RemoveScrap(scrapCost);
+
+				GameGuiController.ShopMenuView.SetCurrencyValues(GameState.GameData.PlayerGold, GameState.GameData.PlayerScrap);
+
+				GameState.AddUnlockedHat(hatId);
+				GameState.SetUnlockedHat(hatId); 
+
+				UpdateGuiAndSaveData();
+			}
+		}
+	}
+
+	private void ShopMenuView_HatEquipRequested(int hatId) {
+		if (!GameState.GameData.UnlockedHatIds.Contains(hatId)) return;
+
+		GameState.SetUnlockedHat(hatId);
+
+		UpdateGuiAndSaveData();
+	}
+
+	private void GameGuiController_SingletonDestroyed() {
 		UnsubGameGuiStaticEvents();
 	}
 
@@ -118,6 +152,11 @@ public class UpgradeHandler : MonoBehaviour {
 		UpdateEngineAttributes();
 
 		GameGuiController.ShopMenuView.CreateHatLines(hatsAssets);
+
+		if (GameState.GameData.UnlockedHatIds.Length > 0) {
+			GameGuiController.ShopMenuView.UnlockHats(GameState.GameData.UnlockedHatIds);
+			SetEquippedHat();
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -180,9 +219,50 @@ public class UpgradeHandler : MonoBehaviour {
 		playerController.SetCurrentAttributes(permanentAttributes + temporaryAttributes); 
 	}
 
+	private void SetEquippedHat() {
+		if (GameState.GameData.CurrentlyEquippedHat == -1) return; 
+
+		// update our gui. 
+		GameGuiController.ShopMenuView.SetEquippedHat(GameState.GameData.CurrentlyEquippedHat);
+
+		// get our hat asset.
+		foreach (HatAsset hatAsset in hatsAssets) {
+			if (hatAsset.HatId == GameState.GameData.CurrentlyEquippedHat) {
+
+				// update our visuals. 
+				playerController.SetEquippedHat(hatAsset.HatAssetReference);
+
+				// update our attributes. 
+				temporaryAttributes = hatAsset.AttributeBonus;
+
+				// back out once we've found our hat. 
+				break; 
+			}
+		}
+
+		playerController.SetCurrentAttributes(permanentAttributes + temporaryAttributes); 
+	}
+
 	//-----------------------------------------------------------------------------------------
 	// Private Methods:
 	//-----------------------------------------------------------------------------------------
+
+	private void UpdateGuiAndSaveData() {
+
+		// finalise our upgrades.
+		// do both as we need to update costs of all upgrades
+		UpdateDrillAttributes();
+		UpdateEngineAttributes();
+
+		GameGuiController.ShopMenuView.UnlockHats(GameState.GameData.UnlockedHatIds);
+		SetEquippedHat();
+
+		foreach (HatAsset hatsAsset in hatsAssets) {
+			GameGuiController.ShopMenuView.UpdateCanAffordHats(hatsAsset.HatId, GameState.GameData.PlayerGold >= hatsAsset.GoldCost && GameState.GameData.PlayerScrap >= hatsAsset.ScrapCost);
+		}
+
+		GameState.SaveData();
+	}
 
 	private void UnsubGameGuiStaticEvents() {
 		if (hasUnsubbedGameGuiStaticEvents) return;
@@ -191,6 +271,9 @@ public class UpgradeHandler : MonoBehaviour {
 
 		GameGuiController.ShopMenuView.DrillUpgradeRequested -= ShopMenuView_DrillUpgradeRequested;
 		GameGuiController.ShopMenuView.EngineUpgradeRequested -= ShopMenuView_EngineUpgradeRequested;
+
+		GameGuiController.ShopMenuView.HatPurchaseRequested -= ShopMenuView_HatPurchaseRequested;
+		GameGuiController.ShopMenuView.HatEquipRequested -= ShopMenuView_HatEquipRequested;
 
 		hasUnsubbedGameGuiStaticEvents = true; 
 	}

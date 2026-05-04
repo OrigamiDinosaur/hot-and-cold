@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27f3b3ec4551253458af5689ca35106c, type: 3}
-  m_Name: Cowboy
+  m_Name: 4_Gold Hat
   m_EditorClassIdentifier: 
-  hatId: 1
+  hatId: 4
   hatAssetReference:
-    m_AssetGUID: 29ca4e7660716574392468ad0e040774
+    m_AssetGUID: 34fdf9e3ad9e7b143951d2a0e7b5c71f
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  hatName: Cowboy
-  hatDescription: Move Faster!
-  goldCost: 300
-  scrapCost: 150
+  hatName: Baron
+  hatDescription: Braggin' Rights
+  goldCost: 5000
+  scrapCost: 5000
   attributeBonus:
     DrillValue: 0
-    MoveSpeed: 2
+    MoveSpeed: 0
     GoldBonus: 0
     ScrapBonus: 0

@@ -4,6 +4,23 @@ using UnityEngine;
 public class HatLine : MonoBehaviour {
 
 	//-----------------------------------------------------------------------------------------
+	// Type Definitions:
+	//-----------------------------------------------------------------------------------------
+
+	public enum States {
+		Unpurchased,
+		Unequipped,
+		Equipped
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Events:
+	//-----------------------------------------------------------------------------------------
+
+	public IntAction HatPurchaseRequested;
+	public IntAction HatEquipRequested;
+
+	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
 	//-----------------------------------------------------------------------------------------
 
@@ -27,7 +44,16 @@ public class HatLine : MonoBehaviour {
 	// Private Fields:
 	//-----------------------------------------------------------------------------------------
 
-	private int hatId; 
+	private int hatId;
+
+	private States state;
+
+	//-----------------------------------------------------------------------------------------
+	// Public Properties:
+	//-----------------------------------------------------------------------------------------
+
+	public int HatId => hatId;
+	public States State => state; 
 
 	//-----------------------------------------------------------------------------------------
 	// Unity Lifecycle:
@@ -49,6 +75,18 @@ public class HatLine : MonoBehaviour {
 		equipButton.PointerExited -= Button_PointerExited;
 		equippedButton.PointerEntered -= Button_PointerEntered;
 		equippedButton.PointerExited -= Button_PointerExited;
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Event Handlers - Inpspector:
+	//-----------------------------------------------------------------------------------------
+
+	public void BuyButton_Clicked() {
+		HatPurchaseRequested?.Invoke(hatId);
+	}
+
+	public void EquipButton_Clicked() {
+		HatEquipRequested?.Invoke(hatId);
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -86,5 +124,19 @@ public class HatLine : MonoBehaviour {
 
 	public void SetDescription(string description) {
 		descriptionText.text = description;
+	}
+	
+	public void SetState(States newState) {
+		if (state == newState) return;
+
+		state = newState;
+
+		buyButton.gameObject.SetActive(state == States.Unpurchased);
+		equipButton.gameObject.SetActive(state == States.Unequipped); 
+		equippedButton.gameObject.SetActive(state == States.Equipped);
+	}
+
+	public void SetCanAffordCost(bool canAffordCost) {
+		buyButton.SetInteractable(canAffordCost); 
 	}
 }

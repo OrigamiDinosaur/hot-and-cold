@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27f3b3ec4551253458af5689ca35106c, type: 3}
-  m_Name: Mining
+  m_Name: 2_Top Hat
   m_EditorClassIdentifier: 
-  hatId: 0
+  hatId: 2
   hatAssetReference:
-    m_AssetGUID: 045e874b395423e4d8b50d6d70d79c9e
+    m_AssetGUID: c14fcd4e1f54981439420f5585a8ba31
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  hatName: Mining
-  hatDescription: Drill Harder!
-  goldCost: 300
-  scrapCost: 150
+  hatName: Top!
+  hatDescription: More Gold!
+  goldCost: 400
+  scrapCost: 200
   attributeBonus:
-    DrillValue: 5
+    DrillValue: 0
     MoveSpeed: 0
-    GoldBonus: 0
+    GoldBonus: 0.5
     ScrapBonus: 0

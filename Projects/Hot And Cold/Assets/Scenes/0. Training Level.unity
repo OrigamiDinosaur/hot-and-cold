@@ -402,20 +402,20 @@ MonoBehaviour:
   text: {fileID: 1177748835}
   normalStyle:
     fontStyle: 0
-    fontSize: 315
+    fontSize: 80
     color: {r: 0, g: 1, b: 0.98039216, a: 1}
   hoveredStyle:
     fontStyle: 0
-    fontSize: 320
+    fontSize: 85
     color: {r: 0, g: 0.6165805, b: 1, a: 1}
   pressedStyle:
     fontStyle: 0
-    fontSize: 320
+    fontSize: 85
     color: {r: 0, g: 1, b: 0.07855153, a: 1}
   disabledStyle:
     fontStyle: 0
-    fontSize: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
+    fontSize: 70
+    color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &18914715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,9 +460,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UpgradeLine, Assembly-CSharp
-        m_MethodName: UpgradeButton_Clicked
+      - m_Target: {fileID: 1916264436}
+        m_TargetAssemblyTypeName: HatLine, Assembly-CSharp
+        m_MethodName: BuyButton_Clicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5024,20 +5024,20 @@ MonoBehaviour:
   text: {fileID: 1679252302}
   normalStyle:
     fontStyle: 0
-    fontSize: 315
+    fontSize: 80
     color: {r: 0, g: 1, b: 0.98039216, a: 1}
   hoveredStyle:
     fontStyle: 0
-    fontSize: 320
+    fontSize: 85
     color: {r: 0, g: 0.6165805, b: 1, a: 1}
   pressedStyle:
     fontStyle: 0
-    fontSize: 320
+    fontSize: 85
     color: {r: 0, g: 1, b: 0.07855153, a: 1}
   disabledStyle:
     fontStyle: 0
-    fontSize: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
+    fontSize: 70
+    color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &725317852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5082,9 +5082,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UpgradeLine, Assembly-CSharp
-        m_MethodName: UpgradeButton_Clicked
+      - m_Target: {fileID: 1916264436}
+        m_TargetAssemblyTypeName: HatLine, Assembly-CSharp
+        m_MethodName: EquipButton_Clicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6926,7 +6926,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &931823407
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8092,7 +8092,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1049543337}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -9988,7 +9988,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1421671861}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -10716,7 +10716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1537929497
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11497,20 +11497,20 @@ MonoBehaviour:
   text: {fileID: 353312084}
   normalStyle:
     fontStyle: 0
-    fontSize: 315
+    fontSize: 80
     color: {r: 0, g: 1, b: 0.98039216, a: 1}
   hoveredStyle:
     fontStyle: 0
-    fontSize: 320
+    fontSize: 85
     color: {r: 0, g: 0.6165805, b: 1, a: 1}
   pressedStyle:
     fontStyle: 0
-    fontSize: 320
+    fontSize: 85
     color: {r: 0, g: 1, b: 0.07855153, a: 1}
   disabledStyle:
     fontStyle: 0
-    fontSize: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
+    fontSize: 70
+    color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1605573886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11550,7 +11550,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1605573887}
   m_OnClick:
     m_PersistentCalls:
@@ -12637,6 +12637,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1761475415}
+  - component: {fileID: 1761475416}
   m_Layer: 0
   m_Name: Hat Root
   m_TagString: Untagged
@@ -12659,6 +12660,19 @@ Transform:
   m_Father: {fileID: 1992300214}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1761475416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761475414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694a0465b8e23d4598d42f0550d0b9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hatRoot: {fileID: 1761475415}
 --- !u!1 &1761575796
 GameObject:
   m_ObjectHideFlags: 0
@@ -13697,7 +13711,12 @@ MonoBehaviour:
   playerController: {fileID: 2109504247}
   drillUpgrades: {fileID: 11400000, guid: a32c99a7543dc70489f8262bcf59ef7d, type: 2}
   engineUpgrades: {fileID: 11400000, guid: 0e8e4fc066c308b4587b602a5a26438b, type: 2}
-  hatsAssets: []
+  hatsAssets:
+  - {fileID: 11400000, guid: c4c397f34b06abb4b9ebb384f69dbcf9, type: 2}
+  - {fileID: 11400000, guid: 53ad8e51fe675ae4d953a010e8386579, type: 2}
+  - {fileID: 11400000, guid: 7076f45450c465a4ca29601c0c24be70, type: 2}
+  - {fileID: 11400000, guid: 4216877341bef9f4594f0315e9e51cb3, type: 2}
+  - {fileID: 11400000, guid: f255e8cac7b96384d946ebddd18b93ac, type: 2}
 --- !u!1 &1916264431
 GameObject:
   m_ObjectHideFlags: 0
@@ -13850,6 +13869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89827177281993f4d80ed84f0f8c6fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rect: {fileID: 1916264432}
   hatNameText: {fileID: 1916264434}
   buyButton: {fileID: 18914715}
   equipButton: {fileID: 725317852}
@@ -14512,7 +14532,7 @@ MonoBehaviour:
   cc: {fileID: 2109504248}
   animator: {fileID: 1543943161}
   robotRoot: {fileID: 348290749}
-  hatRoot: {fileID: 0}
+  hatHandler: {fileID: 1761475416}
   movementSpeed: 3
   defaultSearchDescription: Cold
   searchRanges:

@@ -42,7 +42,7 @@ public class TextButton : MonoBehaviour {
 		button.PointerExited += Button_PointerExited;
 		button.PointerDown += Button_PointerDown;
 		button.PointerUp += Button_PointerUp;
-		button.InteractibilityChanged += Button_InteractabilityChanged; 
+		button.InteractibilityChanged += Button_InteractabilityChanged;
 	}
 
 	protected void Start() {
@@ -92,7 +92,7 @@ public class TextButton : MonoBehaviour {
 	}
 
 	public void Button_InteractabilityChanged(bool isInteractable) {
-
+		
 		if (isInteractable) {
 			SetStyle(isHovered ? hoveredStyle : normalStyle);
 		}

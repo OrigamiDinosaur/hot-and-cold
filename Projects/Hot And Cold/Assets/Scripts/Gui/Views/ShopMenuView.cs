@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -22,6 +24,9 @@ public class ShopMenuView : GuiSlidingView {
 
 	public event Action DrillUpgradeRequested;
 	public event Action EngineUpgradeRequested;
+
+	public event IntAction HatPurchaseRequested;
+	public event IntAction HatEquipRequested; 
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -51,6 +56,8 @@ public class ShopMenuView : GuiSlidingView {
 
 	private ShopStates shopState = ShopStates.Selection;
 
+	private List<HatLine> hatLines; 
+
 	//-----------------------------------------------------------------------------------------
 	// Unity Lifecycle:
 	//-----------------------------------------------------------------------------------------
@@ -67,6 +74,14 @@ public class ShopMenuView : GuiSlidingView {
 
 		drillLine.UpgradeRequested -= DrillLine_UpgradeRequested;
 		engineLine.UpgradeRequested -= EngineLine_UpgradeRequested;
+
+		if (hatLines.Count > 0) {
+
+			foreach (HatLine hatLine in hatLines) {
+				hatLine.HatPurchaseRequested -= HatLine_HatPurchaseRequested;
+				hatLine.HatEquipRequested -= HatLine_HatEquipRequested; 
+			}
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -153,6 +168,14 @@ public class ShopMenuView : GuiSlidingView {
 		EngineUpgradeRequested?.Invoke();
 	}
 
+	private void HatLine_HatPurchaseRequested(int hatId) {
+		HatPurchaseRequested?.Invoke(hatId);
+	}
+
+	private void HatLine_HatEquipRequested(int hatId) {
+		HatEquipRequested?.Invoke(hatId);
+	}
+
 	//-----------------------------------------------------------------------------------------
 	// Getters / Setters:
 	//-----------------------------------------------------------------------------------------
@@ -210,22 +233,73 @@ public class ShopMenuView : GuiSlidingView {
 
 	public void CreateHatLines(HatAsset[] hatAssets) {
 
-		Vector2 baseAnchoredPosition = hatLinePrototype.GetComponent<RectTransform>().anchoredPosition;  
+		Vector2 baseAnchoredPosition = hatLinePrototype.GetComponent<RectTransform>().anchoredPosition;
+
+		hatLines = new List<HatLine>();
 
 		for (int i = 0; i < hatAssets.Length; i++) {
 
 			Vector2 anchoredPosition = baseAnchoredPosition;
 			anchoredPosition.y -= i * distanceBetweenHatLines;
 
-			HatLine hatLine = Instantiate(hatLinePrototype);
+			HatLine hatLine = Instantiate(hatLinePrototype, hatLinePrototype.transform.position, hatLinePrototype.transform.rotation, hatLinePrototype.transform.parent);
 			hatLine.SetAnchoredPosition(anchoredPosition);
 
 			hatLine.SetHatId(hatAssets[i].HatId);
 			hatLine.SetHatName(hatAssets[i].HatName);
 			hatLine.SetCost(hatAssets[i].GoldCost, hatAssets[i].ScrapCost);
 			hatLine.SetDescription(hatAssets[i].HatDescription);
-
 			hatLine.gameObject.SetActive(true);
+
+			hatLine.SetCanAffordCost(GameState.GameData.PlayerGold >= hatAssets[i].GoldCost && GameState.GameData.PlayerScrap >= hatAssets[i].ScrapCost);
+
+			hatLine.HatPurchaseRequested += HatLine_HatPurchaseRequested;
+			hatLine.HatEquipRequested += HatLine_HatEquipRequested; 
+
+			hatLines.Add(hatLine); 
+		}
+	}
+
+	public void UpdateCanAffordHats(int hatId, bool canAffordHat) {
+
+		foreach (HatLine hatLine in hatLines) {
+
+			if (hatLine.HatId == hatId) {
+
+				hatLine.SetCanAffordCost(canAffordHat); 
+			}
+		}
+	}
+
+	public void UnlockHats(int[] hatIds) {
+
+		foreach (HatLine hatLine in hatLines) {
+			
+			if (hatIds.Contains(hatLine.HatId)) {
+
+				hatLine.SetState(HatLine.States.Unequipped); 
+			}
+		}
+	}
+
+	public void SetEquippedHat(int hatId) {
+
+		// check each of our hats. 
+		foreach (HatLine hatLine in hatLines) {
+
+			// if their id matched, equip it...
+			if (hatLine.HatId == hatId) {
+
+				hatLine.SetState(HatLine.States.Equipped);
+			}
+
+			// ... else check if it was equipped to unequip it. 
+			else {
+
+				if (hatLine.State == HatLine.States.Equipped) {
+					hatLine.SetState(HatLine.States.Unequipped); 
+				}
+			}
 		}
 	}
 

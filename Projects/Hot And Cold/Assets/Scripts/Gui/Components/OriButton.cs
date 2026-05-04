@@ -73,7 +73,7 @@ public class OriButton : Button {
 	}
 
 	public void SetInteractable(bool isInteractable) {
-
+		
 		InteractibilityChanged?.Invoke(isInteractable);
 		interactable = isInteractable; 
 	}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Vector3 = UnityEngine.Vector3;
 
 [System.Serializable]
@@ -37,12 +38,8 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] protected CharacterController cc;
 	[SerializeField] protected Animator animator; 
 	[SerializeField] protected Transform robotRoot;
-	[SerializeField] protected Transform hatRoot;
-
-	[Header("Movement")]
-
-	[SerializeField] protected float movementSpeed;
-
+	[SerializeField] protected HatHandler hatHandler;
+	
 	[Header("Search")]
 
 	[SerializeField] protected string defaultSearchDescription;
@@ -103,6 +100,10 @@ public class PlayerController : MonoBehaviour {
 		currentAttributes = inAttributes;
 	}
 
+	public void SetEquippedHat(AssetReferenceGameObject assetReference) {
+		hatHandler.LoadHat(assetReference);
+	}
+
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
 	//-----------------------------------------------------------------------------------------
@@ -131,7 +132,7 @@ public class PlayerController : MonoBehaviour {
 		robotRoot.transform.forward = movementDirection;
 		animator.SetFloat(SPEED_PARAMETER, 1.0f);
 
-		Vector3 movement = (movementDirection * movementSpeed) * Time.deltaTime;
+		Vector3 movement = (movementDirection * currentAttributes.MoveSpeed) * Time.deltaTime;
 
 		cc.Move(movement);
 	}
@@ -233,11 +234,11 @@ public class PlayerController : MonoBehaviour {
 
 		switch (itemValue.currency) {
 			case Currencies.Gold:
-				totalGoldFound += itemValue.value;
+				totalGoldFound += (int)(itemValue.value * (1.0f + currentAttributes.GoldBonus));
 				GameGuiController.ScoreView.SetGoldValue(totalGoldFound);
 				break;
 			case Currencies.Scrap:
-				totalScrapFound += itemValue.value; 
+				totalScrapFound += (int)(itemValue.value * (1.0f + currentAttributes.ScrapBonus));
 				GameGuiController.ScoreView.SetScrapValue(totalScrapFound);
 				break;
 		}

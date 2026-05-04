@@ -1,3 +1,5 @@
+using System;
+
 [System.Serializable]
 public class GameData {
 
@@ -27,6 +29,7 @@ public class GameData {
 		DrillLevel = 0;
 		EngineLevel = 0;
 
+		UnlockedHatIds = Array.Empty<int>(); 
 		CurrentlyEquippedHat = -1; 
 	}
 }
