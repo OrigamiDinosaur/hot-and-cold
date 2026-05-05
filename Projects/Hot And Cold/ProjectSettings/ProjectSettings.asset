@@ -154,7 +154,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   applicationIdentifier:
     Android: com.OrigamiDinosaur.HotAndCold
-    Standalone: com.Unity-Technologies.com.unity.template.urp-blank
+    Standalone: com.OriDino.HotAndCold
     iPhone: com.Unity-Technologies.com.unity.template.urp-blank
   buildNumber:
     Standalone: 0
@@ -906,10 +906,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 0e35bb12-d1c4-48a5-9456-acdddebb007e
+  cloudProjectId: bf3b4bdd-9829-4d32-a43d-0c12d3b8ff5e
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Chess And Ladders
+  projectName: Hot And Cold
   organizationId: matthew-bulleyment
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: a7dbfd31e9dfd5a439f781e48eaea26b
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: a5e5ad416900bdf72af233bcfa569579
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -33,6 +33,7 @@ MonoBehaviour:
   m_ShaderBundleCustomNaming: 
   m_MonoScriptBundleNaming: 0
   m_CheckForContentUpdateRestrictionsOption: 0
+  m_BuildAndReleaseBinFileOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
     m_Id: f5c2041efb832434a9101323084ed6d7
@@ -63,11 +64,13 @@ MonoBehaviour:
       - m_Id: 8c41a0259589fb747a662d311507e538
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: a0fb4695e41751a469ea20b39d88dc41
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+        m_Value: https://bf3b4bdd-9829-4d32-a43d-0c12d3b8ff5e.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/e98ae613-4d15-4d5c-bf96-207c81fcaf50/release_by_badge/latest/entry_by_path/content/?path=
       - m_Id: a2f3fc8c1222f534c9eb32b0ed7b8491
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: f5c2041efb832434a9101323084ed6d7
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+        m_Value: CCDBuildData/5c9dedbe-31aa-4d21-94b9-406f56463d51/e98ae613-4d15-4d5c-bf96-207c81fcaf50/latest
+      - m_Id: d383364dd7f21864aab372785fd4b884
+        m_Value: production
     - m_InheritedParent: 
       m_Id: 97ea610da62babb4e807aebed9cc0ad1
       m_ProfileName: Production
@@ -84,6 +87,8 @@ MonoBehaviour:
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: f5c2041efb832434a9101323084ed6d7
         m_Value: ServerData/[BuildTarget]
+      - m_Id: d383364dd7f21864aab372785fd4b884
+        m_Value: 
     - m_InheritedParent: 
       m_Id: c1c44be71b847b54190a7cd3e0f88a60
       m_ProfileName: Development
@@ -100,6 +105,8 @@ MonoBehaviour:
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: f5c2041efb832434a9101323084ed6d7
         m_Value: ServerData/[BuildTarget]
+      - m_Id: d383364dd7f21864aab372785fd4b884
+        m_Value: 
     - m_InheritedParent: 
       m_Id: d10027ad4fee8fa47883f8594077582d
       m_ProfileName: Test
@@ -116,6 +123,8 @@ MonoBehaviour:
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: f5c2041efb832434a9101323084ed6d7
         m_Value: ServerData/[BuildTarget]
+      - m_Id: d383364dd7f21864aab372785fd4b884
+        m_Value: 
     m_ProfileEntryNames:
     - m_Id: 1a7a48435062a844e943ff2d0a18205f
       m_Name: RemoteHost
@@ -135,10 +144,16 @@ MonoBehaviour:
     - m_Id: f5c2041efb832434a9101323084ed6d7
       m_Name: Remote.BuildPath
       m_InlineUsage: 0
+    - m_Id: d383364dd7f21864aab372785fd4b884
+      m_Name: EnvironmentName
+      m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
     - default
+    - Hat
+    - Logos
+    - Levels
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: a75d3ce875710f54eaa04e2d6203254d, type: 2}
@@ -169,11 +184,11 @@ MonoBehaviour:
           m_Key: HostingServiceUploadSpeed
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.String
-          m_Data: Library/com.unity.addressables/aa/Windows/StandaloneWindows64
+          m_Data: CCDBuildData/5c9dedbe-31aa-4d21-94b9-406f56463d51/e98ae613-4d15-4d5c-bf96-207c81fcaf50/latest
           m_Key: ContentRoot
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.Boolean
-          m_Data: True
+          m_Data: False
           m_Key: IsEnabled
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.String
@@ -188,3 +203,9 @@ MonoBehaviour:
     m_RegisteredServiceTypeRefs:
     - UnityEditor.AddressableAssets.HostingServices.HttpHostingService, Unity.Addressables.Editor
     m_PingTimeoutInMilliseconds: 5000
+  m_CcdManagedData:
+    EnvironmentId: 
+    EnvironmentName: 
+    BucketId: 
+    Badge: 
+    State: 0
