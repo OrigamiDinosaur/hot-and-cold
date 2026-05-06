@@ -227,8 +227,6 @@ public class GameSceneController : MonoBehaviour {
 
 		// hide our menu. 
 		GameGuiController.GameMenuView.SlideOffLeft();
-
-		GameGuiController.GameMenuView.SetInteractable(false);
 		EventSystem.current.SetSelectedGameObject(null); 
 	}
 
