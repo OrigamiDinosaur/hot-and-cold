@@ -31,12 +31,13 @@ public class HatHandler : MonoBehaviour {
 
 	public void LoadHat(AssetReferenceGameObject assetReference) {
 
+		// if we have a hat instance, destroy it and release its operation handle. 
 		if (hatInstance != null) {
-
 			Destroy(hatInstance);
 			Addressables.ReleaseInstance(hatLoadOpHandle); 
 		}
 
+		// start loading our hat asset. 
 		hatLoadOpHandle = Addressables.LoadAssetAsync<GameObject>(assetReference);
 		hatLoadOpHandle.Completed += HatLoadOpHandle_Completed; 
 	}
@@ -47,6 +48,7 @@ public class HatHandler : MonoBehaviour {
 
 	private void HatLoadOpHandle_Completed(AsyncOperationHandle<GameObject> asyncOperationHandle) {
 
+		// if our loading is complete, instantiate a hat!
 		if (asyncOperationHandle.Status == AsyncOperationStatus.Succeeded) {
 			hatInstance = Instantiate(asyncOperationHandle.Result, hatRoot); 
 		}

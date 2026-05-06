@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Drill
   m_EditorClassIdentifier: 
   upgradeName: Drill
-  upgradeValue:
+  upgradeValues:
   - 2
   - 3
   - 4
@@ -21,8 +21,8 @@ MonoBehaviour:
   - 6
   - 7
   - 8
-  - 9
   - 10
+  - 12
   - 15
   upgradeGoldCosts: 0000000064000000c80000002c010000f4010000200300001405000034080000480d00007c150000
   upgradeScrapCosts: 00000000320000006400000096000000fa000000900100008a0200001a040000a4060000be0a0000

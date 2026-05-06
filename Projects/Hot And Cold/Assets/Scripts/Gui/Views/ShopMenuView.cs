@@ -92,27 +92,13 @@ public class ShopMenuView : GuiSlidingView {
 
 		switch (shopState) {
 			case ShopStates.Selection:
-				DismissShop();
-				BackButtonClicked?.Invoke();
+				SelectionClicked();
 				break;
 			case ShopStates.Upgrades:
-
-				shopState = ShopStates.Selection;
-
-				upgradesSubView.SetInteractable(false); 
-
-				selectionSubView.SlideOnLeft();
-				upgradesSubView.SlideOffRight();
-
+				UpgradesClicked();
 				break;
 			case ShopStates.Cosmetics:
-
-				shopState = ShopStates.Selection;
-
-				cosmeticsSubView.SetInteractable(false); 
-
-				selectionSubView.SlideOnRight();
-				cosmeticsSubView.SlideOffLeft();
+				CosmeticsClicked();
 				break;
 		}
 	}
@@ -120,11 +106,13 @@ public class ShopMenuView : GuiSlidingView {
 	public void UpgradesButton_Clicked() {
 		if (shopState != ShopStates.Selection) return;
 
+		// update our shop state. 
 		shopState = ShopStates.Upgrades;
-
-		selectionSubView.SetInteractable(false);
+		
+		// make sure our upgrades view is visible. 
 		upgradesSubView.ShowHideView(true); 
 
+		// slide our menus into position. 
 		selectionSubView.SlideOffLeft();
 		upgradesSubView.SlideOnRight();
 	}
@@ -132,11 +120,13 @@ public class ShopMenuView : GuiSlidingView {
 	public void CosmeticsButton_Clicked() {
 		if (shopState != ShopStates.Selection) return;
 
+		// update our shop state. 
 		shopState = ShopStates.Cosmetics;
-
-		selectionSubView.SetInteractable(false);
+		
+		// make sure our cosmetics view is visible. 
 		cosmeticsSubView.ShowHideView(true); 
 
+		// slide our menus into position.
 		selectionSubView.SlideOffRight();
 		cosmeticsSubView.SlideOnLeft();
 	}
@@ -192,27 +182,36 @@ public class ShopMenuView : GuiSlidingView {
 
 	public void PresentShop() {
 
+		// update our shop state. 
 		shopState = ShopStates.Selection;
 
+		// reset our views. 
 		selectionSubView.ResetState();
 		upgradesSubView.ResetState();
 		cosmeticsSubView.ResetState();
 
+		// show our views.
 		ShowHideView(true);
-		selectionSubView.ShowHideView(true); 
+		selectionSubView.ShowHideView(true);
+		
+		// slide on our shop. 
 		SlideOnRight();
 	}
 
 	public void DismissShop() {
 
+		// slide off our shop. 
 		SlideOffRight();
 
+		// stop shop interaction. 
 		SetInteractable(false);
 
+		// stop our subviews being interactable. 
 		selectionSubView.SetInteractable(false);
 		upgradesSubView.SetInteractable(false);
 		cosmeticsSubView.SetInteractable(false);
 
+		// hide our subviews so they aren't coveringt the screen. 
 		upgradesSubView.ShowHideView(false);
 		cosmeticsSubView.ShowHideView(false); 
 	}
@@ -233,39 +232,49 @@ public class ShopMenuView : GuiSlidingView {
 
 	public void CreateHatLines(HatAsset[] hatAssets) {
 
+		// get our default anchored position. 
 		Vector2 baseAnchoredPosition = hatLinePrototype.GetComponent<RectTransform>().anchoredPosition;
 
+		// init our hat lines list. 
 		hatLines = new List<HatLine>();
 
+		// iterate over our hat assets. 
 		for (int i = 0; i < hatAssets.Length; i++) {
 
+			// get our new anchored position. 
 			Vector2 anchoredPosition = baseAnchoredPosition;
 			anchoredPosition.y -= i * distanceBetweenHatLines;
 
+			// create our new hatline and position it. 
 			HatLine hatLine = Instantiate(hatLinePrototype, hatLinePrototype.transform.position, hatLinePrototype.transform.rotation, hatLinePrototype.transform.parent);
 			hatLine.SetAnchoredPosition(anchoredPosition);
 
+			// init its data. 
 			hatLine.SetHatId(hatAssets[i].HatId);
 			hatLine.SetHatName(hatAssets[i].HatName);
 			hatLine.SetCost(hatAssets[i].GoldCost, hatAssets[i].ScrapCost);
 			hatLine.SetDescription(hatAssets[i].HatDescription);
+
+			// show the object. we do this before the next step due to event timings. 
 			hatLine.gameObject.SetActive(true);
 
+			// set whether we can afford this hat. 
 			hatLine.SetCanAffordCost(GameState.GameData.PlayerGold >= hatAssets[i].GoldCost && GameState.GameData.PlayerScrap >= hatAssets[i].ScrapCost);
 
+			// subscribe to its events. 
 			hatLine.HatPurchaseRequested += HatLine_HatPurchaseRequested;
 			hatLine.HatEquipRequested += HatLine_HatEquipRequested; 
 
+			// add this line to our list. 
 			hatLines.Add(hatLine); 
 		}
 	}
 
 	public void UpdateCanAffordHats(int hatId, bool canAffordHat) {
 
+		// iterate through our hats and set whether they can be afforded. 
 		foreach (HatLine hatLine in hatLines) {
-
 			if (hatLine.HatId == hatId) {
-
 				hatLine.SetCanAffordCost(canAffordHat); 
 			}
 		}
@@ -273,10 +282,9 @@ public class ShopMenuView : GuiSlidingView {
 
 	public void UnlockHats(int[] hatIds) {
 
+		// iterate through our hats, and unlocked them if our ids match. 
 		foreach (HatLine hatLine in hatLines) {
-			
 			if (hatIds.Contains(hatLine.HatId)) {
-
 				hatLine.SetState(HatLine.States.Unequipped); 
 			}
 		}
@@ -309,12 +317,40 @@ public class ShopMenuView : GuiSlidingView {
 
 	protected override void OnTransitionCompleted() {
 
-		switch (shopState) {
-			case ShopStates.Selection:
-
-				SetInteractable(true);
-				selectionSubView.SetInteractable(true);
-				break;
+		// if we're in the selection state, set us interactable. 
+		if (shopState == ShopStates.Selection) {
+			SetInteractable(true);
+			selectionSubView.SetInteractable(true);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Private Methods:
+	//-----------------------------------------------------------------------------------------
+
+	private void SelectionClicked() {
+
+		DismissShop();
+		BackButtonClicked?.Invoke();
+	}
+
+	private void UpgradesClicked() {
+
+		// update our shop state.
+		shopState = ShopStates.Selection;
+		
+		// slide our menus into position. 
+		selectionSubView.SlideOnLeft();
+		upgradesSubView.SlideOffRight();
+	}
+
+	private void CosmeticsClicked() {
+
+		// update our shop state.
+		shopState = ShopStates.Selection;
+		
+		// slide our menus into position. 
+		selectionSubView.SlideOnRight();
+		cosmeticsSubView.SlideOffLeft();
 	}
 }

@@ -18,26 +18,34 @@ public class SaveDataHandler : Singleton<SaveDataHandler> {
 
 	public static void Save(GameData gameData) {
 
+		// create our file path. 
 		string dataPath = Application.persistentDataPath;
 		string filePath = String.Format(FILE_NAME_FORMAT, dataPath, FILE_NAME);
 
+		// create our serializer and stream. 
 		XmlSerializer serializer = new XmlSerializer(typeof(GameData));
 		FileStream stream = new FileStream(filePath, FileMode.Create);
+
+		// serilize our data to our file. 
 		serializer.Serialize(stream, gameData);
 		stream.Close();
 	}
 
 	public static bool Load(out GameData gameData) {
 
+		// create our file path. 
 		string dataPath = Application.persistentDataPath;
 		string filePath = String.Format(FILE_NAME_FORMAT, dataPath, FILE_NAME);
 
+		// check our file exists. 
 		if (File.Exists(filePath)) {
 
+			// create our serializer and stream. 
 			XmlSerializer serializer = new XmlSerializer(typeof(GameData));
 			FileStream stream = new FileStream(filePath, FileMode.Open);
-			gameData = serializer.Deserialize(stream) as GameData; 
-			
+
+			// deserialize our data from our file. 
+			gameData = serializer.Deserialize(stream) as GameData;
 			stream.Close();
 
 			return true;
@@ -45,8 +53,8 @@ public class SaveDataHandler : Singleton<SaveDataHandler> {
 
 		Debug.LogWarning("Save File not found!");
 
-		gameData = new GameData(); 
-
+		// if we haven't found the file, set default game data. 
+		gameData = new GameData();
 		return false; 
 	}
 }

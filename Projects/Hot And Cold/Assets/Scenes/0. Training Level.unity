@@ -2862,6 +2862,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect: {fileID: 416851638}
   canvasGroup: {fileID: 416851640}
+  textButtons: []
   startingState: 0
   slideOffLeftDuration: 0.5
   slideOffLeftLeanType: 1
@@ -2874,7 +2875,7 @@ MonoBehaviour:
   goldValueText: {fileID: 930474499}
   scrapValueText: {fileID: 1761575798}
   coinBlipSfx: {fileID: 8300000, guid: f9b73fcd4646ea94586fbad2a08b16e2, type: 3}
-  progressRate: 0.1
+  progressRate: 0.05
   progressAmount: 3
 --- !u!225 &416851640
 CanvasGroup:
@@ -7432,6 +7433,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect: {fileID: 931823407}
   canvasGroup: {fileID: 931823409}
+  textButtons:
+  - {fileID: 1395692926}
+  - {fileID: 1908546307}
+  - {fileID: 475926}
   startingState: 1
   slideOffLeftDuration: 0.5
   slideOffLeftLeanType: 27
@@ -8536,6 +8541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect: {fileID: 1049543338}
   canvasGroup: {fileID: 1049543340}
+  textButtons: []
   startingState: 1
   slideOffLeftDuration: 0.5
   slideOffLeftLeanType: 1
@@ -8914,6 +8920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect: {fileID: 1114833036}
   canvasGroup: {fileID: 1114833037}
+  textButtons: []
   startingState: 2
   slideOffLeftDuration: 0.5
   slideOffLeftLeanType: 27
@@ -10867,6 +10874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect: {fileID: 1421671862}
   canvasGroup: {fileID: 1421671863}
+  textButtons: []
   startingState: 0
   slideOffLeftDuration: 0.5
   slideOffLeftLeanType: 27
@@ -11627,6 +11635,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect: {fileID: 1537929497}
   canvasGroup: {fileID: 1537929498}
+  textButtons: []
   startingState: 1
   slideOffLeftDuration: 0.5
   slideOffLeftLeanType: 27
@@ -12049,6 +12058,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 468465432576676885, guid: 5d233ebb58fd7e343a93a7bba997ad24, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 907691412251604920, guid: 5d233ebb58fd7e343a93a7bba997ad24, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2548103799733465723, guid: 5d233ebb58fd7e343a93a7bba997ad24, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3521460438126863287, guid: 5d233ebb58fd7e343a93a7bba997ad24, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 7027794915043535846, guid: 5d233ebb58fd7e343a93a7bba997ad24, type: 3}
       propertyPath: m_Name
       value: AudioHandler
@@ -12096,6 +12121,10 @@ PrefabInstance:
     - target: {fileID: 7027794915043535864, guid: 5d233ebb58fd7e343a93a7bba997ad24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7972641031257645350, guid: 5d233ebb58fd7e343a93a7bba997ad24, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15400,17 +15429,17 @@ MonoBehaviour:
   hatHandler: {fileID: 1761475416}
   defaultSearchDescription: Cold
   searchRanges:
-  - range: 1
+  - range: 1.5
     description: Treasure!!!
-  - range: 2
+  - range: 2.5
     description: Hotter!!
-  - range: 3
+  - range: 3.5
     description: Hot!
-  - range: 4
+  - range: 4.5
     description: Warmer
-  - range: 5
+  - range: 6
     description: Warm
-  drillRate: 0.25
+  drillRate: 0.15
   pingSfx: {fileID: 1296298889}
   drillSfx: {fileID: 1182586713}
   treasureFoundSfx: {fileID: 259441173}

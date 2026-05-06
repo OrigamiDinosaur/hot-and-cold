@@ -14,7 +14,6 @@ public class TimeView : GuiView {
 	//-----------------------------------------------------------------------------------------
 	
 	public void SetRemainingTime(float remainingTime) {
-
 		timeRemainingText.text = remainingTime.ToString("F2"); 
 	}
 }

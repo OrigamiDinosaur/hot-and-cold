@@ -8,6 +8,7 @@ public class MainGuiController : MonoBehaviour {
 	//-----------------------------------------------------------------------------------------
 
 	public event Action PlayGameRequested;
+	public event Action ExitGameRequested;
 
 	//-----------------------------------------------------------------------------------------
 	// Inspector Variables:
@@ -22,6 +23,10 @@ public class MainGuiController : MonoBehaviour {
 
 	public void PlayGameButton_Clicked() {
 		PlayGameRequested?.Invoke();
+	}
+
+	public void ExitGameButton_Clicked() {
+		ExitGameRequested?.Invoke();
 	}
 
 	//-----------------------------------------------------------------------------------------

@@ -37,12 +37,16 @@ public class TreasureWarmthView : MonoBehaviour {
 
 	public void ShowTreasureWarmthDialogue(string warmthDescription) {
 
+		// cancel our sequence to prevent it disappearing to early. 
 		sequence.Cancel();
 
+		// hide our view. 
 		canvasGroup.alpha = 0.0f; 
 
+		// update our description. 
 		treasureWarmthText.text = warmthDescription;
 		
+		// present our view. 
 		sequence.Tween(LeanTween.value(gameObject, SetAlpha, 0.0f, 1.0f, presentDuration)
 			.setEase(LeanTweenType.easeInQuad)
 			.setOnComplete(DismissAfterDelay));
@@ -53,7 +57,6 @@ public class TreasureWarmthView : MonoBehaviour {
 	//-----------------------------------------------------------------------------------------
 
 	private void DismissAfterDelay() {
-
 		sequence.Do(dismissDelay, () => {
 			sequence.Tween(LeanTween.value(gameObject, SetAlpha, 1.0f, 0.0f, dismissDuration)
 				.setEase(LeanTweenType.easeInQuad));

@@ -1,5 +1,4 @@
 using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
 
 public class AudioHandler : ComponentSingleton<AudioHandler> {
 
@@ -7,33 +6,33 @@ public class AudioHandler : ComponentSingleton<AudioHandler> {
 	// Inspector Variables:
 	//-----------------------------------------------------------------------------------------
 
-	[SerializeField] protected AudioClip buttonDownClip;
-	[SerializeField] protected AudioClip buttonUpClip; 
-	[SerializeField] protected AudioClip buttonHoveredClip;
-	[SerializeField] protected AudioClip buttonUnhoveredClip;
-	[SerializeField] protected AudioClip buttonDisabledClip; 
+	[SerializeField] protected AudioSource buttonDownClip;
+	[SerializeField] protected AudioSource buttonUpClip; 
+	[SerializeField] protected AudioSource buttonHoveredClip;
+	[SerializeField] protected AudioSource buttonUnhoveredClip;
+	[SerializeField] protected AudioSource buttonDisabledClip; 
 
 	//-----------------------------------------------------------------------------------------
 	// Public Methods:
 	//-----------------------------------------------------------------------------------------
 
 	public static void PlayButtonDownSfx() {
-		AudioSource.PlayClipAtPoint(Instance.buttonDownClip, Vector3.zero);
+		Instance.buttonDownClip.Play();
 	}
 
 	public static void PlayButtonUpSfx() {
-		AudioSource.PlayClipAtPoint(Instance.buttonUpClip, Vector3.zero);
+		Instance.buttonUpClip.Play();
 	}
 
 	public static void PlayButtonHoveredSfx() {
-		AudioSource.PlayClipAtPoint(Instance.buttonHoveredClip, Vector3.zero);
+		Instance.buttonHoveredClip.Play();
 	}
 
 	public static void PlayButtonUnhoveredSfx() {
-		AudioSource.PlayClipAtPoint(Instance.buttonUnhoveredClip, Vector3.zero);
+		Instance.buttonUnhoveredClip.Play();
 	}
 
 	public static void PlayButtonDisabledSfx() {
-		AudioSource.PlayClipAtPoint(Instance.buttonDisabledClip, Vector3.zero); 
+		Instance.buttonDisabledClip.Play();
 	}
 }

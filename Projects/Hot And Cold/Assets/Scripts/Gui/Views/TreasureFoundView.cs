@@ -56,15 +56,19 @@ public class TreasureFoundView : MonoBehaviour {
 
 	public void ShowTreasureFoundDialogue(TreasureAsset treasureAsset) {
 
+		// update our treasure text. 
 		treasureNameText.text = treasureAsset.ItemName;
 		treasureValueText.text = string.Format(VALUE_TEXT, treasureAsset.ItemValue.value);
 
+		// get our currency index and use it to set our treasure icon. 
 		int currencyIndex = (int)treasureAsset.ItemValue.currency;
 		treasureIconImage.sprite = treasureIcons[currencyIndex];
 
+		// get our rarity index and use it to set our treasure color. 
 		int rarityIndex = (int)treasureAsset.ItemRarity;
 		treasureNameText.color = rarityColors[rarityIndex];
 
+		// present our view. 
 		sequence.Tween(LeanTween.value(gameObject, SetAlpha, 0.0f, 1.0f, presentDuration)
 			.setEase(LeanTweenType.easeInQuad)
 			.setOnComplete(DismissAfterDelay));
@@ -75,7 +79,6 @@ public class TreasureFoundView : MonoBehaviour {
 	//-----------------------------------------------------------------------------------------
 
 	private void DismissAfterDelay() {
-
 		sequence.Do(dismissDelay, () => {
 			sequence.Tween(LeanTween.value(gameObject, SetAlpha, 1.0f, 0.0f, dismissDuration)
 				.setEase(LeanTweenType.easeInQuad));

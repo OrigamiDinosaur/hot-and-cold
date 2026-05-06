@@ -46,6 +46,8 @@ public class TextButton : MonoBehaviour {
 	}
 
 	protected void Start() {
+
+		// our button image is hidden so we need to set this so it still recieves events. 
 		button.image.alphaHitTestMinimumThreshold = 0.0f;
 	}
 
@@ -101,6 +103,14 @@ public class TextButton : MonoBehaviour {
 		}
 	}
 	
+	//-----------------------------------------------------------------------------------------
+	// Public Methods:
+	//-----------------------------------------------------------------------------------------
+
+	public void ResetButton() {
+		SetStyle(normalStyle); 
+	}
+
 	//-----------------------------------------------------------------------------------------
 	// Private Methods:
 	//-----------------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameSceneController : MonoBehaviour {
@@ -13,7 +14,6 @@ public class GameSceneController : MonoBehaviour {
 		Menu,
 		MenuClose,
 		TransitionToShop,
-		Shop,
 		TransitionToGame,
 		Game,
 		GameEnd,
@@ -129,16 +129,6 @@ public class GameSceneController : MonoBehaviour {
 
 	private void MenuView_TransitionCompleted() {
 
-		// todo: convert to switch if a third state arrises. 
-		if (state == States.MenuClose) {
-
-			ChangeStates(States.TransitionToGame);
-		}
-		else if (state == States.Exit) {
-
-			SceneManager.LoadScene(0);
-		}
-
 		switch (state) {
 			case States.MenuClose:
 				ChangeStates(States.TransitionToGame);
@@ -159,11 +149,9 @@ public class GameSceneController : MonoBehaviour {
 	private void OutroScreenView_TransitionCompleted() {
 		
 		if (state == States.TransitionToOutroScreen) {
-
 			ChangeStates(States.OutroScreen);
 		}
 		else if (state == States.TransitionToReset) {
-
 			ChangeStates(States.Reset); 
 		}
 	}
@@ -195,9 +183,6 @@ public class GameSceneController : MonoBehaviour {
 				break;
 			case States.TransitionToShop:
 				StateTransitionToShop_Enter();
-				break;
-			case States.Shop:
-				StateShop_Enter();
 				break;
 			case States.TransitionToGame:
 				StateTransitionToGame_Enter();
@@ -232,7 +217,6 @@ public class GameSceneController : MonoBehaviour {
 	private void UpdateStates() {
 
 		switch (state) {
-			
 			case States.Game:
 				StateGame_Update();
 				break;
@@ -241,36 +225,43 @@ public class GameSceneController : MonoBehaviour {
 
 	private void StateMenuClose_Enter() {
 
+		// hide our menu. 
 		GameGuiController.GameMenuView.SlideOffLeft();
+
+		GameGuiController.GameMenuView.SetInteractable(false);
+		EventSystem.current.SetSelectedGameObject(null); 
 	}
 
 	private void StateTransitionToShop_Enter() {
 
+		// hide our menu. 
 		GameGuiController.GameMenuView.SlideOffLeft();
 
+		// update our currency values.
 		GameGuiController.ShopMenuView.SetCurrencyValues(GameState.GameData.PlayerGold, GameState.GameData.PlayerScrap);
 
+		// slide our our shop. 
 		GameGuiController.ShopMenuView.PresentShop();
 	}
-
-	private void StateShop_Enter() {
-
-		//shopMenuView.SetButtonsEnabled(true); 
-	}
-
+	
 	private void StateTransitionToGame_Enter() {
 		
+		// disable our intro camera, forcing our cinemachine camera to transition to our game view. 
 		introCamera.Priority = 0;
 		introCamera.enabled = false;
 		
+		// spawn our first treasure. 
 		treasureSpawner.SpawnTreasure();
 
+		// set our default time and present our time view. 
 		GameGuiController.TimeView.SetRemainingTime(gameDuration);
 		GameGuiController.TimeView.PresentView();
 
+		// reset our score values and present our score view. 
 		GameGuiController.ScoreView.ResetValues();
 		GameGuiController.ScoreView.PresentView();
 
+		// move to our game after delay. 
 		sequence.Do(transitionToGameDuration, () => {
 			ChangeStates(States.Game);
 		});
@@ -278,34 +269,43 @@ public class GameSceneController : MonoBehaviour {
 
 	private void StateGame_Enter() {
 		
+		// give the player controller our treasure and start our game. 
 		playerController.SetTreasure(treasureSpawner.Treasure);
 		playerController.StartGame();
 
+		// set our game start and end time. 
 		gameStartTime = Time.time;
 		gameEndTime = gameStartTime + gameDuration; 
 	}
 
 	private void StateGame_Update() {
 
+		// calculate our remaining time and update our time view. 
 		float remainingTime = gameEndTime - Time.time;
-
 		GameGuiController.TimeView.SetRemainingTime(remainingTime);
 
+		// if we're exceeded our game time, end it! 
 		if (Time.time >= gameEndTime) {
-
 			ChangeStates(States.GameEnd);
 		}
 	}
 
 	private void StateGameEnd_Enter() {
 
+		// reset and hide our time view. 
 		GameGuiController.TimeView.SetRemainingTime(0.0f);
 		GameGuiController.TimeView.DismissView();
 
+		// hide our score view. 
 		GameGuiController.ScoreView.DismissView();
 
+		// stop our game. 
 		playerController.StopGame();
 
+		// have our upgrade handler update our costs.
+		upgradeHandler.GameFinished();
+
+		// move to our transition after a short delay.
 		sequence.Do(gameEndDuration, () => {
 			ChangeStates(States.TransitionToOutroScreen);
 		});
@@ -313,40 +313,48 @@ public class GameSceneController : MonoBehaviour {
 
 	private void StateTransitionToOutroScreen_Enter() {
 
+		// reset our outro progress, set it visible and slide it on. 
+		GameGuiController.OutroScreenView.ResetProgres();
 		GameGuiController.OutroScreenView.ShowHideView(true);
 		GameGuiController.OutroScreenView.SlideOnLeft();
 	}
 
 	private void StateOutroScreen_Enter() {
 
+		// start the outro ticking. 
 		GameGuiController.OutroScreenView.StartProgress(playerController.TotalGoldFound, playerController.TotalScrapFound);
 	}
 
 	private void StateTransitionToReset_Enter() {
 
+		// hide our outro view. 
 		GameGuiController.OutroScreenView.SlideOffRight();
 	}
 
 	private void StateReset_Enter() {
 
+		// reset our player position. 
 		playerController.ResetGame();
 
+		// reenable our intro camera. 
 		introCamera.Priority = 2;
 		introCamera.enabled = true;
 
+		// move to transition after a delay. 
 		sequence.Do(resetDuration, () => {
 			ChangeStates(States.TransitionToMenu);
 		});
 	}
 
 	private void StateTransitionToMenu_Enter() {
-
-		GameGuiController.GameMenuView.SetButtonsEnabled(true);
+		
+		// show our menu. 
 		GameGuiController.GameMenuView.SlideOnLeft();
 	}
 
 	private void StateExit_Enter() {
 
+		// hide our menu. 
 		GameGuiController.GameMenuView.SlideOffLeft();
 	}
 

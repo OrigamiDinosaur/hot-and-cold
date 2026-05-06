@@ -129,7 +129,6 @@ public class UpgradeHandler : MonoBehaviour {
 		if (!GameState.GameData.UnlockedHatIds.Contains(hatId)) return;
 
 		GameState.SetUnlockedHat(hatId);
-
 		UpdateGuiAndSaveData();
 	}
 
@@ -151,12 +150,17 @@ public class UpgradeHandler : MonoBehaviour {
 		UpdateDrillAttributes();
 		UpdateEngineAttributes();
 
+		// create our hats and unlock / equip as needed. 
 		GameGuiController.ShopMenuView.CreateHatLines(hatsAssets);
 
 		if (GameState.GameData.UnlockedHatIds.Length > 0) {
 			GameGuiController.ShopMenuView.UnlockHats(GameState.GameData.UnlockedHatIds);
 			SetEquippedHat();
 		}
+	}
+
+	public void GameFinished() {
+		UpdateGuiAndSaveData();
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -188,6 +192,7 @@ public class UpgradeHandler : MonoBehaviour {
 		// update our shop (including adjusting our engine level from 0 index to 1 index)
 		GameGuiController.ShopMenuView.SetDrillStats(currentDrillLevel + 1, goldCost, scrapCost, canAffordCost);
 
+		// update our player attributes. 
 		playerController.SetCurrentAttributes(permanentAttributes + temporaryAttributes); 
 	}
 
@@ -216,6 +221,7 @@ public class UpgradeHandler : MonoBehaviour {
 		// update our shop (including adjusting our engine level from 0 index to 1 index)
 		GameGuiController.ShopMenuView.SetEngineStats(currentEngineLevel + 1, goldCost, scrapCost, canAffordCost);
 
+		// update our player attributes. 
 		playerController.SetCurrentAttributes(permanentAttributes + temporaryAttributes); 
 	}
 
@@ -240,6 +246,7 @@ public class UpgradeHandler : MonoBehaviour {
 			}
 		}
 
+		// update our player attributes. 
 		playerController.SetCurrentAttributes(permanentAttributes + temporaryAttributes); 
 	}
 
@@ -254,9 +261,11 @@ public class UpgradeHandler : MonoBehaviour {
 		UpdateDrillAttributes();
 		UpdateEngineAttributes();
 
+		// unlock and equip our hats. 
 		GameGuiController.ShopMenuView.UnlockHats(GameState.GameData.UnlockedHatIds);
 		SetEquippedHat();
 
+		// update whether we can afford our hats. 
 		foreach (HatAsset hatsAsset in hatsAssets) {
 			GameGuiController.ShopMenuView.UpdateCanAffordHats(hatsAsset.HatId, GameState.GameData.PlayerGold >= hatsAsset.GoldCost && GameState.GameData.PlayerScrap >= hatsAsset.ScrapCost);
 		}

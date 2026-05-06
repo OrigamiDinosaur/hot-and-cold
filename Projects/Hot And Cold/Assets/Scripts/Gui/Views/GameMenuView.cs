@@ -24,20 +24,14 @@ public class GameMenuView : GuiSlidingView {
 	//-----------------------------------------------------------------------------------------
 
 	public void PlayButton_Clicked() {
-		SetButtonsEnabled(false);
-
 		PlayButtonClicked?.Invoke();
 	}
 
 	public void ShopButton_Clicked() {
-		SetButtonsEnabled(false);
-
 		ShopButtonClicked?.Invoke();
 	}
 
 	public void ExitButton_Clicked() {
-		SetButtonsEnabled(false);
-
 		ExitButtonClicked?.Invoke();
 	}
 	

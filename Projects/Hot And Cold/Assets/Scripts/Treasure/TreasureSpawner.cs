@@ -39,18 +39,20 @@ public class TreasureSpawner : MonoBehaviour {
 
 	protected void Start() {
 		
+		// init our spawn thresholds. 
 		spawnThresholds = new float[treasureSpawns.Length];
 
 		float currentMaxThreshold = 0; 
 
+		// iterate our our treasure spawns, adding our new threshold based on rarity. 
 		for (int i = 0; i < treasureSpawns.Length; i++) {
-
 			int rarityIndex = (int)treasureSpawns[i].ItemRarity;
 
 			spawnThresholds[i] = currentMaxThreshold + weightPerRarity[rarityIndex];
 			currentMaxThreshold = spawnThresholds[i]; 
 		}
 
+		// cache our max threshold. 
 		maxThreshold = currentMaxThreshold; 
 	}
 

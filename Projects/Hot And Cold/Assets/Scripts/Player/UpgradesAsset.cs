@@ -17,8 +17,7 @@ public class UpgradesAsset : ScriptableObjectBase {
 	[Header("Details")]
 
 	[SerializeField] protected string upgradeName;
-
-	[FormerlySerializedAs("upgradeValue")]
+	
 	[SerializeField] protected float[] upgradeValues; 
 	
 	[SerializeField] protected int[] upgradeGoldCosts;

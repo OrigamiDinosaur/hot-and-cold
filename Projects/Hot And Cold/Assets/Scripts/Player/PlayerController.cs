@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour {
 	//-----------------------------------------------------------------------------------------
 
 	private static readonly int SPEED_PARAMETER = Animator.StringToHash("Speed");
+	private const float GRAVITY_FORCE = 9.98f; 
 
 	//-----------------------------------------------------------------------------------------
 	// Type Definitions:
@@ -87,13 +88,13 @@ public class PlayerController : MonoBehaviour {
 
 	protected void Start() {
 
+		// cache our starting position. 
 		startingPosition = transform.position;
 
 		ChangeStates(States.Waiting);
 	}
 
 	protected void Update() {
-
 		UpdateStates();
 	}
 
@@ -119,6 +120,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void StartGame() {
 		
+		// reset our currencies. 
 		totalGoldFound = 0;
 		totalScrapFound = 0;
 
@@ -127,29 +129,35 @@ public class PlayerController : MonoBehaviour {
 
 	public void StopGame() {
 
+		// hide our drilling view if need be. 
 		if (state == States.Drilling) GameGuiController.DrillingView.DismissView();
 
 		ChangeStates(States.Ending);
 	}
 
 	public void ResetGame() {
-
 		transform.position = startingPosition;
 	}
 
 	public void UpdateMovement(Vector3 movementDirection) {
 		if (state != States.Searching) return; 
 
+		// if we're passed zero value, the player isn't moving so set our animator to still.
 		if (movementDirection == Vector3.zero) {
 			animator.SetFloat(SPEED_PARAMETER, 0.0f);
 			return; 
 		}
 
+		// have our robot face the movement direction. 
 		robotRoot.transform.forward = movementDirection;
+
+		// set our animator to walk. 
 		animator.SetFloat(SPEED_PARAMETER, 1.0f);
 
+		// calculate our movement vector. 
 		Vector3 movement = (movementDirection * currentAttributes.MoveSpeed) * Time.deltaTime;
 
+		// move!
 		cc.Move(movement);
 	}
 
@@ -193,11 +201,13 @@ public class PlayerController : MonoBehaviour {
 
 	private void StateSearching_Update() {
 
-		cc.Move(Vector3.down * 9.98f * Time.deltaTime);
+		// gravity!
+		cc.Move(Vector3.down * GRAVITY_FORCE * Time.deltaTime);
 	}
 
 	private void StateDrilling_Enter() {
 
+		// stop our walking. 
 		animator.SetFloat(SPEED_PARAMETER, 0.0f);
 
 		// set our depth value and update our gui.
@@ -213,11 +223,12 @@ public class PlayerController : MonoBehaviour {
 
 	private void StateEnding_Enter() {
 
+		// stop us walking. 
 		animator.SetFloat(SPEED_PARAMETER, 0.0f);
 
+		// update our game state. 
 		GameState.AddGold(totalGoldFound);
 		GameState.AddScrap(totalScrapFound);
-
 		GameState.SaveData();
 	}
 
@@ -227,43 +238,55 @@ public class PlayerController : MonoBehaviour {
 
 	private void Search() {
 
+		// get our treasure position, and adjust its y to match our own. 
 		Vector3 treasurePosition = currentTreasure.transform.position;
 		treasurePosition.y = transform.position.y;
 
+		// calculate our distance from the treasure. 
 		float distanceFromTreasure = Vector3.Distance(transform.position, treasurePosition);
 		
+		// set our default search description. 
 		string searchDescription = defaultSearchDescription;
 
+		// assume we didn't find treasure. 
 		bool didFindTreasure = false; 
 
+		// iterate over our search ranges. 
 		for (int i = 0; i < searchRanges.Length; i++) {
 
+			// if the distance is less than our range....
 			if (distanceFromTreasure < searchRanges[i].range) {
 
+				//... update our searach description. 
 				searchDescription = searchRanges[i].description;
 
+				// if its our 0 entry that means we've found treasure. 
 				if (i == 0) didFindTreasure = true;
+
+				// stop at first successful check. 
 				break;
 			}
 		}
 		
+		// if we've found our treasure go to our drilling state. 
 		if (didFindTreasure) {
-			
-
 			ChangeStates(States.Drilling);
 		}
+
+		// else play our ping sfx, and show our treasure warmth dialogue. 
 		else {
 
 			pingSfx.Play();
-
 			GameGuiController.TreasureWarmthView.ShowTreasureWarmthDialogue(searchDescription);
 		}
 	}
 
 	private void Drill() {
 		
+		// back out if we've not reached our drill time. 
 		if (Time.time < nextDrillTime) return;
 		
+		// set our next drill time. 
 		nextDrillTime = Time.time + drillRate;
 		
 		// reduce our depth value
@@ -293,8 +316,10 @@ public class PlayerController : MonoBehaviour {
 
 	private void CollectResources() {
 
+		// get our item value. 
 		ItemValue itemValue = currentTreasure.TreasureAsset.ItemValue;
 
+		// check which currency we're dealing with, then add the value (adjusted by our bonuses) to our stored currency. 
 		switch (itemValue.currency) {
 			case Currencies.Gold:
 				totalGoldFound += (int)(itemValue.value * (1.0f + currentAttributes.GoldBonus));

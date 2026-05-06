@@ -47,12 +47,16 @@ public class OutroScreenView : GuiSlidingView {
 	protected void Update() {
 		if (!shouldProgressValues) return;
 
+		// check whether we should update again. 
 		if (Time.time > nextUpdateTime) {
 
+			// set our next update time. 
 			nextUpdateTime = Time.time + progressRate;
 
+			// play our blip sound. 
 			AudioSource.PlayClipAtPoint(coinBlipSfx, Vector3.zero);
 
+			// update our gold value if needed.
 			if (goldProgressValue < totalGold) {
 
 				goldProgressValue += progressAmount;
@@ -61,6 +65,7 @@ public class OutroScreenView : GuiSlidingView {
 				goldValueText.text = goldProgressValue.ToString();
 			}
 
+			// update our scrap value if needed.
 			if (scrapProgressValue < totalScrap) {
 
 				scrapProgressValue += progressAmount;
@@ -69,6 +74,7 @@ public class OutroScreenView : GuiSlidingView {
 				scrapValueText.text = scrapProgressValue.ToString();
 			}
 
+			// if both our values have reached the totals, flag that we're done!
 			if (goldProgressValue == totalGold && scrapProgressValue == totalScrap) {
 
 				shouldProgressValues = false; 
@@ -81,14 +87,22 @@ public class OutroScreenView : GuiSlidingView {
 	// Public Methods:
 	//-----------------------------------------------------------------------------------------
 
+	public void ResetProgres() {
+		goldValueText.text = "0"; 
+		scrapValueText.text = "0";
+	}
+
 	public void StartProgress(int gold, int scrap) {
 
+		// set our totals.
 		totalGold = gold;
 		totalScrap = scrap;
 
+		// reset our progress.
 		goldProgressValue = 0;
 		scrapProgressValue = 0;
 
+		// set our first update time and flag we can start. 
 		nextUpdateTime = Time.time + progressRate;
 		shouldProgressValues = true; 
 	}

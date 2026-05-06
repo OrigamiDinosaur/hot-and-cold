@@ -44,14 +44,18 @@ public class GameState : Singleton<GameState> {
 
 	public static void AddUnlockedHat(int hatId) {
 
+		// create an empty array.
 		List<int> hatIds = new List<int>();
 
+		// fill it with our current array of hats.
 		if (GameData.UnlockedHatIds.Length > 0) {
 			hatIds.AddRange(GameData.UnlockedHatIds);
 		}
 
+		// add our new id.
 		hatIds.Add(hatId);
 
+		// convert our list back to an array. 
 		GameData.UnlockedHatIds = hatIds.ToArray(); 
 	}
 
@@ -73,7 +77,6 @@ public class GameState : Singleton<GameState> {
 	}
 
 	public static void SaveData() {
-
 		SaveDataHandler.Save(GameData); 
 	}
 }
