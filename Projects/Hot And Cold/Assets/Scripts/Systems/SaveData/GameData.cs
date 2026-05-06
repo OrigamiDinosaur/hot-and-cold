@@ -23,8 +23,8 @@ public class GameData {
 
 	public void ResetData() {
 
-		PlayerGold = 1000;
-		PlayerScrap = 1000;
+		PlayerGold = 0;
+		PlayerScrap = 0;
 
 		DrillLevel = 0;
 		EngineLevel = 0;
